@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512"
+    height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"
+    class="">
+    <g>
+        <linearGradient id="a" x1="157.732" x2="354.268" y1="414.703" y2="218.167" gradientUnits="userSpaceOnUse">
+            <stop offset=".015" stop-color="#8c84bc" />
+            <stop offset="1" stop-color="#dbdfec" />
+        </linearGradient>
+        <linearGradient id="c" x1="179.842" x2="332.158" y1="380.812" y2="228.496" gradientUnits="userSpaceOnUse">
+            <stop offset=".015" stop-color="#aed7cb" />
+            <stop offset="1" stop-color="#e4f2ee" />
+        </linearGradient>
+        <linearGradient xlink:href="#a" id="d" x1="198.725" x2="313.275" y1="343.696" y2="229.146" />
+        <linearGradient id="b" x1="353.247" x2="470.752" y1="154.752" y2="37.248" gradientUnits="userSpaceOnUse">
+            <stop offset=".015" stop-color="#b7bfd8" />
+            <stop offset="1" stop-color="#e4f2ee" />
+        </linearGradient>
+        <linearGradient xlink:href="#b" id="e" x1="41.247" x2="158.752" y1="154.752" y2="37.248" />
+        <g data-name="15-umbrella">
+            <path fill="#fce6aa"
+                d="M296 508a52.059 52.059 0 0 1-52-52V352a12 12 0 0 1 24 0v104a28 28 0 0 0 56 0 12 12 0 0 1 24 0 52.059 52.059 0 0 1-52 52zM256 204a12 12 0 0 1-12-12v-41a12 12 0 0 1 24 0v41a12 12 0 0 1-12 12z"
+                opacity="1" data-original="#fce6aa" />
+            <path fill="url(#a)"
+                d="M256 180c-86.019 0-156 77.159-156 172a12 12 0 0 0 12 12h288a12 12 0 0 0 12-12c0-94.841-69.981-172-156-172z"
+                opacity="1" data-original="url(#a)" />
+            <path fill="url(#a)"
+                d="M328.74 233.08C309.914 198.851 284.081 180 256 180s-53.914 18.851-72.74 53.08C165.681 265.042 156 307.275 156 352a12 12 0 0 0 12 12h176a12 12 0 0 0 12-12c0-44.725-9.681-86.958-27.26-118.92z"
+                opacity="1" data-original="url(#a)" />
+            <path fill="url(#a)"
+                d="M290.4 236.509C282.684 197.957 271.755 180 256 180s-26.684 17.956-34.4 56.509C215.412 267.481 212 308.5 212 352a12 12 0 0 0 12 12h64a12 12 0 0 0 12-12c0-43.5-3.411-84.52-9.6-115.491z"
+                opacity="1" data-original="url(#a)" />
+            <path fill="url(#b)"
+                d="M458.618 44.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 368 148h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#b)" class="" />
+            <path fill="url(#b)"
+                d="M146.618 44.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 56 148h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#b)" class="" />
+            <g fill="#c9e4dd">
+                <path
+                    d="M473 204a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM473 252a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM424 204a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM424 252a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM376 204a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM473 300a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM473 348a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM39 204a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM39 252a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM89 204a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM89 252a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM137 204a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM39 300a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12zM39 348a12 12 0 0 1-12-12v-8a12 12 0 0 1 24 0v8a12 12 0 0 1-12 12z"
+                    fill="#c9e4dd" opacity="1" data-original="#c9e4dd" />
+            </g>
+        </g>
+    </g>
+</svg>

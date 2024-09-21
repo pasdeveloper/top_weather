@@ -1,16 +1,16 @@
 class WeatherData {
-  int queryCost;
+  double queryCost;
   double latitude;
   double longitude;
   String resolvedAddress;
   String address;
   String timezone;
-  int tzoffset;
+  double tzoffset;
   String description;
-  List<CurrentConditions> days;
+  List<Conditions> days;
   List<dynamic> alerts;
   Map<String, Station> stations;
-  CurrentConditions currentConditions;
+  Conditions currentConditions;
 
   WeatherData({
     required this.queryCost,
@@ -26,19 +26,40 @@ class WeatherData {
     required this.stations,
     required this.currentConditions,
   });
+
+  factory WeatherData.fromJson(Map<String, dynamic> json) {
+    return WeatherData(
+      queryCost: json['queryCost'].toDouble(),
+      latitude: json['latitude'].toDouble(),
+      longitude: json['longitude'].toDouble(),
+      resolvedAddress: json['resolvedAddress'],
+      address: json['address'],
+      timezone: json['timezone'],
+      tzoffset: json['tzoffset'].toDouble(),
+      description: json['description'],
+      days: (json['days'] as List)
+          .map((day) => Conditions.fromJson(day))
+          .toList(),
+      alerts: json['alerts'] as List<dynamic>,
+      stations: (json['stations'] as Map<String, dynamic>).map(
+        (key, value) => MapEntry(key, Station.fromJson(value)),
+      ),
+      currentConditions: Conditions.fromJson(json['currentConditions']),
+    );
+  }
 }
 
-class CurrentConditions {
+class Conditions {
   String datetime;
-  int datetimeEpoch;
+  double datetimeEpoch;
   double temp;
   double feelslike;
   double humidity;
   double dew;
-  int precip;
+  double precip;
   double precipprob;
-  int snow;
-  int snowdepth;
+  double snow;
+  double snowdepth;
   dynamic preciptype;
   double windgust;
   double windspeed;
@@ -48,26 +69,39 @@ class CurrentConditions {
   double cloudcover;
   double solarradiation;
   double solarenergy;
-  int uvindex;
+  double uvindex;
   String conditions;
   String icon;
   List<String>? stations;
   String source;
   String? sunrise;
-  int? sunriseEpoch;
+  double? sunriseEpoch;
   String? sunset;
-  int? sunsetEpoch;
+  double? sunsetEpoch;
   double? moonphase;
   double? tempmax;
   double? tempmin;
   double? feelslikemax;
   double? feelslikemin;
-  int? precipcover;
-  int? severerisk;
+  double? precipcover;
+  double? severerisk;
   String? description;
-  List<CurrentConditions>? hours;
+  List<Conditions>? hours;
 
-  CurrentConditions({
+  Moonphase? get moonphaseValue {
+    if (moonphase == null) return null;
+    if (moonphase! == 0) return Moonphase.newMoon;
+    if (moonphase! < .25) return Moonphase.waxingCrescent;
+    if (moonphase! == .25) return Moonphase.firstQuarter;
+    if (moonphase! < .5) return Moonphase.waxingGibbous;
+    if (moonphase! == .5) return Moonphase.fullMoon;
+    if (moonphase! < .75) return Moonphase.waningGibbous;
+    if (moonphase! == .75) return Moonphase.lastQuarter;
+    if (moonphase! > .75) return Moonphase.waningCrescent;
+    return null;
+  }
+
+  Conditions({
     required this.datetime,
     required this.datetimeEpoch,
     required this.temp,
@@ -106,17 +140,75 @@ class CurrentConditions {
     this.description,
     this.hours,
   });
+
+  factory Conditions.fromJson(Map<String, dynamic> json) {
+    return Conditions(
+      datetime: json['datetime'],
+      datetimeEpoch: json['datetimeEpoch'].toDouble(),
+      temp: json['temp'].toDouble(),
+      feelslike: json['feelslike'].toDouble(),
+      humidity: json['humidity'].toDouble(),
+      dew: json['dew'].toDouble(),
+      precip: json['precip'].toDouble(),
+      precipprob: json['precipprob'].toDouble(),
+      snow: json['snow'].toDouble(),
+      snowdepth: json['snowdepth'].toDouble(),
+      preciptype: json['preciptype'],
+      windgust: json['windgust'].toDouble(),
+      windspeed: json['windspeed'].toDouble(),
+      winddir: json['winddir'].toDouble(),
+      pressure: json['pressure'].toDouble(),
+      visibility: json['visibility'].toDouble(),
+      cloudcover: json['cloudcover'].toDouble(),
+      solarradiation: json['solarradiation'].toDouble(),
+      solarenergy: json['solarenergy'].toDouble(),
+      uvindex: json['uvindex'].toDouble(),
+      conditions: json['conditions'],
+      icon: json['icon'],
+      stations:
+          json['stations'] != null ? List<String>.from(json['stations']) : null,
+      source: json['source'],
+      sunrise: json['sunrise'],
+      sunriseEpoch: json['sunriseEpoch']?.toDouble(),
+      sunset: json['sunset'],
+      sunsetEpoch: json['sunsetEpoch']?.toDouble(),
+      moonphase: json['moonphase']?.toDouble(),
+      tempmax: json['tempmax']?.toDouble(),
+      tempmin: json['tempmin']?.toDouble(),
+      feelslikemax: json['feelslikemax']?.toDouble(),
+      feelslikemin: json['feelslikemin']?.toDouble(),
+      precipcover: json['precipcover']?.toDouble(),
+      severerisk: json['severerisk']?.toDouble(),
+      description: json['description'],
+      hours: json['hours'] != null
+          ? (json['hours'] as List)
+              .map((hour) => Conditions.fromJson(hour))
+              .toList()
+          : null,
+    );
+  }
+}
+
+enum Moonphase {
+  newMoon,
+  waxingCrescent,
+  firstQuarter,
+  waxingGibbous,
+  fullMoon,
+  waningGibbous,
+  lastQuarter,
+  waningCrescent,
 }
 
 class Station {
-  int distance;
+  double distance;
   double latitude;
   double longitude;
-  int useCount;
+  double useCount;
   String id;
   String name;
-  int quality;
-  int contribution;
+  double quality;
+  double contribution;
 
   Station({
     required this.distance,
@@ -128,4 +220,17 @@ class Station {
     required this.quality,
     required this.contribution,
   });
+
+  factory Station.fromJson(Map<String, dynamic> json) {
+    return Station(
+      distance: json['distance'].toDouble(),
+      latitude: json['latitude'].toDouble(),
+      longitude: json['longitude'].toDouble(),
+      useCount: json['useCount'].toDouble(),
+      id: json['id'],
+      name: json['name'],
+      quality: json['quality'].toDouble(),
+      contribution: json['contribution'].toDouble(),
+    );
+  }
 }

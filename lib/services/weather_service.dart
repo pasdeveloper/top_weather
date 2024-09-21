@@ -1,4 +1,8 @@
-import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:top_weather/models/weather_data.dart';
+import 'package:top_weather/services/mock_response.dart';
 
 class WeatherService {
   final _baseUrl = Uri.https(
@@ -6,8 +10,7 @@ class WeatherService {
       'VisualCrossingWebServices/rest/services/timeline',
       {'key': const String.fromEnvironment('API_KEY')});
 
-  // Future<WeatherData>
-  void getByLatLon(num lat, num lon) {
+  Future<WeatherData> getByLatLon(num lat, num lon) {
     final url = _baseUrl.replace(
       path:
           '${_baseUrl.path}/${lat.toStringAsFixed(4)},${lon.toStringAsFixed(4)}',
@@ -16,8 +19,7 @@ class WeatherService {
     return _getWeatherData(url);
   }
 
-  // Future<WeatherData>
-  void getByLocationName(String name) {
+  Future<WeatherData> getByLocationName(String name) {
     final url = _baseUrl.replace(
       path: '${_baseUrl.path}/$name',
     );
@@ -25,10 +27,14 @@ class WeatherService {
     return _getWeatherData(url);
   }
 
-  // Future<WeatherData>
-  void _getWeatherData(Uri url) async {
-    final response = await http.get(url);
+  Future<WeatherData> _getWeatherData(Uri url) async {
+    // final response = await http.get(url);
+    // final decodedJson = json.decode(response.body);
 
-    print(response.body);
+    await Future.delayed(const Duration(seconds: 1));
+    final decodedJson = json.decode(mockRsponse);
+
+    final data = WeatherData.fromJson(decodedJson);
+    return data;
   }
 }

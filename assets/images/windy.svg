@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512"
+    height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"
+    class="">
+    <g>
+        <linearGradient id="a" x1="73.247" x2="190.752" y1="178.752" y2="61.248" gradientUnits="userSpaceOnUse">
+            <stop offset=".015" stop-color="#b7bfd8" />
+            <stop offset="1" stop-color="#e4f2ee" />
+        </linearGradient>
+        <linearGradient xlink:href="#a" id="b" x1="322.1" x2="439.605" y1="513.814" y2="396.31" />
+        <g data-name="07-windy couldy">
+            <g fill="#aed7cb">
+                <path
+                    d="M424 172H280a12 12 0 0 1 0-24h144a20 20 0 1 0-15-33.226 12 12 0 0 1-18-15.88A44 44 0 1 1 424 172zM464 348a44.034 44.034 0 0 1-33-14.894 12 12 0 0 1 18-15.88A20 20 0 1 0 464 284H320a12 12 0 0 1 0-24h144a44 44 0 0 1 0 88zM48 412a44 44 0 0 1 0-88h144a12 12 0 0 1 0 24H48a20 20 0 1 0 15 33.226 12 12 0 0 1 18 15.88A44.034 44.034 0 0 1 48 412z"
+                    fill="#aed7cb" opacity="1" data-original="#aed7cb" class="" />
+            </g>
+            <path fill="#c9e4dd" d="M456 228H272a12 12 0 0 1 0-24h184a12 12 0 0 1 0 24z" opacity="1"
+                data-original="#c9e4dd" class="" />
+            <path fill="#94caba" d="M224 228h-16a12 12 0 0 1 0-24h16a12 12 0 0 1 0 24z" opacity="1"
+                data-original="#94caba" />
+            <path fill="#c9e4dd"
+                d="M328 348h-88a12 12 0 0 1 0-24h88a12 12 0 0 1 0 24zM168 284H64a12 12 0 0 1 0-24h104a12 12 0 0 1 0 24z"
+                opacity="1" data-original="#c9e4dd" class="" />
+            <path fill="#94caba" d="M272 284h-56a12 12 0 0 1 0-24h56a12 12 0 0 1 0 24z" opacity="1"
+                data-original="#94caba" />
+            <path fill="url(#a)"
+                d="M178.618 68.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 88 172h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#a)" class="" />
+            <path fill="url(#a)"
+                d="M427.471 403.127a52.007 52.007 0 0 0-101.477 1.073 52 52 0 0 0 10.859 102.859h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#a)" class="" />
+        </g>
+    </g>
+</svg>

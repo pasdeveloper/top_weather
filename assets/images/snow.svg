@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512"
+    height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"
+    class="">
+    <g>
+        <linearGradient id="a" x1="353.247" x2="470.752" y1="170.752" y2="53.248" gradientUnits="userSpaceOnUse">
+            <stop offset=".015" stop-color="#b7bfd8" />
+            <stop offset="1" stop-color="#e4f2ee" />
+        </linearGradient>
+        <linearGradient xlink:href="#a" id="b" x1="41.247" x2="158.752" y1="498.752" y2="381.248" />
+        <g data-name="08-snow">
+            <path fill="#8c84bc"
+                d="M320 244h-35.029l19.514-19.515a12 12 0 0 0-16.97-16.97L268 227.029V192a12 12 0 0 0-24 0v35.029l-19.515-19.514a12 12 0 0 0-16.97 16.97L227.029 244H192a12 12 0 0 0 0 24h35.029l-19.514 19.515a12 12 0 1 0 16.97 16.97L244 284.971V320a12 12 0 0 0 24 0v-35.029l19.515 19.514a12 12 0 0 0 16.97-16.97L284.971 268H320a12 12 0 0 0 0-24zM480 404h-35.029l19.514-19.515a12 12 0 0 0-16.97-16.97L428 387.029V352a12 12 0 0 0-24 0v35.029l-19.515-19.514a12 12 0 0 0-16.97 16.97L387.029 404H352a12 12 0 0 0 0 24h35.029l-19.514 19.515a12 12 0 1 0 16.97 16.97L404 444.971V480a12 12 0 0 0 24 0v-35.029l19.515 19.514a12 12 0 0 0 16.97-16.97L444.971 428H480a12 12 0 0 0 0-24zM160 84h-35.029l19.514-19.515a12 12 0 0 0-16.97-16.97L108 67.029V32a12 12 0 0 0-24 0v35.029L64.485 47.515a12 12 0 0 0-16.97 16.97L67.029 84H32a12 12 0 0 0 0 24h35.029l-19.514 19.515a12 12 0 1 0 16.97 16.97L84 124.971V160a12 12 0 0 0 24 0v-35.029l19.515 19.514a12 12 0 0 0 16.97-16.97L124.971 108H160a12 12 0 0 0 0-24z"
+                opacity="1" data-original="#8c84bc" />
+            <g fill="#e2e0ee">
+                <circle cx="460" cy="276" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="268" cy="460" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="36" cy="212" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="140" cy="252" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="372" cy="220" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="356" cy="308" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="196" cy="348" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="308" cy="372" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="76" cy="308" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="284" cy="52" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+                <circle cx="220" cy="140" r="12" fill="#e2e0ee" opacity="1" data-original="#e2e0ee" />
+            </g>
+            <path fill="url(#a)"
+                d="M458.618 60.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 368 164h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#a)" />
+            <path fill="url(#a)"
+                d="M146.618 388.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 56 492h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#a)" />
+        </g>
+    </g>
+</svg>

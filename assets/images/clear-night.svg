@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512"
+    height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"
+    class="">
+    <g>
+        <linearGradient id="a" x1="153.247" x2="270.751" y1="186.752" y2="69.248" gradientUnits="userSpaceOnUse">
+            <stop offset=".015" stop-color="#8c84bc" />
+            <stop offset="1" stop-color="#dbdfec" />
+        </linearGradient>
+        <linearGradient id="b" x1="118.433" x2="320.805" y1="409.563" y2="207.191" gradientUnits="userSpaceOnUse">
+            <stop offset=".015" stop-color="#f9cd55" />
+            <stop offset="1" stop-color="#fed3b2" />
+        </linearGradient>
+        <linearGradient xlink:href="#a" id="c" x1="353.247" x2="470.751" y1="274.752" y2="157.248" />
+        <linearGradient xlink:href="#a" id="d" x1="41.247" x2="158.751" y1="426.752" y2="309.248" />
+        <g data-name="21-moon">
+            <path fill="url(#a)"
+                d="M258.618 76.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 168 180h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#a)" />
+            <path fill="url(#b)"
+                d="M405.769 292.559a12 12 0 0 0-12.485-.247A116.025 116.025 0 0 1 234.09 134.756a12 12 0 0 0-11.643-17.87A172.02 172.02 0 0 0 68 288c0 94.841 77.159 172 172 172a172.01 172.01 0 0 0 171.274-156.232 12 12 0 0 0-5.505-11.209z"
+                opacity="1" data-original="url(#b)" />
+            <path fill="url(#c)"
+                d="M458.618 164.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 368 268h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#c)" />
+            <path fill="url(#d)"
+                d="M146.618 316.065a52.007 52.007 0 0 0-101.477 1.076A52 52 0 0 0 56 420h88a52 52 0 0 0 2.618-103.935z"
+                opacity="1" data-original="url(#d)" />
+        </g>
+    </g>
+</svg>
