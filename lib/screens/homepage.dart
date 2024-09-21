@@ -3,6 +3,7 @@ import 'package:top_weather/core/locator.dart';
 import 'package:top_weather/models/weather_data.dart';
 import 'package:top_weather/services/weather_service.dart';
 import 'package:top_weather/widgets/forecast_hero.dart';
+import 'package:top_weather/widgets/timeline_card.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -31,18 +32,15 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: FutureBuilder(
           future: _weatherData$,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return _loading();
-            }
-
             if (snapshot.data != null) {
               return Text(snapshot.data!.resolvedAddress);
             }
 
-            return const Text('Weather');
+            return const Text('Top Weather');
           },
         ),
         actions: [
@@ -73,13 +71,25 @@ class _HomepageState extends State<Homepage> {
           return SingleChildScrollView(
             padding: const EdgeInsets.all(12),
             child: Column(
-              children: [ForecastHero(data.currentConditions)],
+              children: [
+                ForecastHero(data.days[0]),
+                if (data.days[0].hours != null)
+                  TimelineCard(_getNext24Hours(data.days[0], data.days[1]))
+              ],
             ),
           );
         },
       ),
     );
   }
+}
+
+List<Conditions> _getNext24Hours(Conditions today, Conditions tomorrow) {
+  if (today.hours == null || tomorrow.hours == null) return [];
+
+  var currentHour = DateTime.now().hour;
+  return [...today.hours!, ...tomorrow.hours!]
+      .sublist(currentHour, currentHour + 24);
 }
 
 Widget _loading() => const Center(

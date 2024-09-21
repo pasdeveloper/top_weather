@@ -51,7 +51,7 @@ class WeatherData {
 
 class Conditions {
   String datetime;
-  double datetimeEpoch;
+  int datetimeEpoch;
   double temp;
   double feelslike;
   double humidity;
@@ -144,7 +144,7 @@ class Conditions {
   factory Conditions.fromJson(Map<String, dynamic> json) {
     return Conditions(
       datetime: json['datetime'],
-      datetimeEpoch: json['datetimeEpoch'].toDouble(),
+      datetimeEpoch: json['datetimeEpoch'],
       temp: json['temp'].toDouble(),
       feelslike: json['feelslike'].toDouble(),
       humidity: json['humidity'].toDouble(),
