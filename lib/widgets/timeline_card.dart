@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/core/app_images.dart';
 import 'package:top_weather/core/date_utils.dart';
 import 'package:top_weather/models/weather_data.dart';
+import 'package:top_weather/widgets/precipitation_probability.dart';
 
 class TimelineCard extends StatelessWidget {
   const TimelineCard(
@@ -66,24 +67,7 @@ Widget _hourTileForecast(Conditions conditions, BuildContext context) {
         const SizedBox(
           height: 5,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.water_drop,
-              size: 12,
-              color: theme.colorScheme.onPrimaryContainer.withOpacity(.7),
-            ),
-            const SizedBox(
-              width: 2,
-            ),
-            Text(
-              '${conditions.precipprob.round()}%',
-              style: theme.textTheme.bodySmall!.copyWith(
-                  color: theme.colorScheme.onPrimaryContainer.withOpacity(.7)),
-            )
-          ],
-        )
+        PrecipitationProbability(conditions.precipprob.round())
       ],
     ),
   );

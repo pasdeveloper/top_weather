@@ -11,7 +11,17 @@ class AppImages {
     'partly-cloudy-night': '${_basePath}partly-cloud-night.svg',
     'clear-day': '${_basePath}clear-day.svg',
     'clear-night': '${_basePath}clear-night.svg',
+    'sunrise': '${_basePath}sunrise.svg',
+    'sunset': '${_basePath}sunset.svg',
   };
+
+  static String get sunrise {
+    return iconPathByName('sunrise');
+  }
+
+  static String get sunset {
+    return iconPathByName('sunset');
+  }
 
   static String iconPathByName(String name) {
     return _paths[name] ?? '';

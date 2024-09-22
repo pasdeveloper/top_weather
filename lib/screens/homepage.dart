@@ -72,7 +72,10 @@ class _HomepageState extends State<Homepage> {
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                ForecastHero(data.days[0]),
+                ForecastHero(
+                  currentConditions: data.currentConditions,
+                  currentDayConditions: data.days[0],
+                ),
                 if (data.days[0].hours != null)
                   TimelineCard(_getNext24Hours(data.days[0], data.days[1]))
               ],

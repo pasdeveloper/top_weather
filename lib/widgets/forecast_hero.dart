@@ -5,12 +5,14 @@ import 'package:top_weather/core/date_utils.dart';
 import 'package:top_weather/models/weather_data.dart';
 
 class ForecastHero extends StatelessWidget {
-  const ForecastHero(
-    this.conditions, {
+  const ForecastHero({
+    required this.currentConditions,
+    required this.currentDayConditions,
     super.key,
   });
 
-  final Conditions conditions;
+  final Conditions currentConditions;
+  final Conditions currentDayConditions;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class ForecastHero extends StatelessWidget {
       top: 0,
       bottom: 0,
       child: SvgPicture.asset(
-        AppImages.iconPathByName(conditions.icon),
+        AppImages.iconPathByName(currentConditions.icon),
         height: 150,
         width: 150,
       ),
@@ -46,7 +48,7 @@ class ForecastHero extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _bigTemperature(theme),
-        if (conditions.description != null) _description(theme),
+        _description(theme),
         const Spacer(),
         _temperatureSummary(theme),
         _date(theme),
@@ -56,7 +58,7 @@ class ForecastHero extends StatelessWidget {
 
   Text _date(ThemeData theme) {
     return Text(
-      toDate(conditions.datetimeEpoch),
+      toDate(currentConditions.datetimeEpoch),
       style: theme.textTheme.bodyMedium!
           .copyWith(color: theme.colorScheme.onSurface.withOpacity(.7)),
     );
@@ -66,7 +68,7 @@ class ForecastHero extends StatelessWidget {
     return Row(
       children: [
         Text(
-          '${conditions.tempmin}°',
+          '${currentDayConditions.tempmin}°',
           style:
               theme.textTheme.headlineSmall!.copyWith(color: Colors.lightBlue),
         ),
@@ -75,11 +77,11 @@ class ForecastHero extends StatelessWidget {
           style: theme.textTheme.headlineSmall,
         ),
         Text(
-          '${conditions.tempmax}°',
+          '${currentDayConditions.tempmax}°',
           style: theme.textTheme.headlineSmall!.copyWith(color: Colors.red),
         ),
         Text(
-          ' Feels like ${conditions.feelslike}°',
+          ' Feels like ${currentConditions.feelslike}°',
           style: theme.textTheme.headlineSmall,
         ),
       ],
@@ -88,14 +90,14 @@ class ForecastHero extends StatelessWidget {
 
   Text _description(ThemeData theme) {
     return Text(
-      conditions.description!,
+      currentConditions.conditions,
       style: theme.textTheme.bodyLarge,
     );
   }
 
   Text _bigTemperature(ThemeData theme) {
     return Text(
-      '${conditions.temp}°',
+      '${currentConditions.temp}°',
       style:
           theme.textTheme.displayLarge!.copyWith(fontWeight: FontWeight.bold),
     );

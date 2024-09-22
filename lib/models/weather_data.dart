@@ -75,9 +75,9 @@ class Conditions {
   List<String>? stations;
   String source;
   String? sunrise;
-  double? sunriseEpoch;
+  int? sunriseEpoch;
   String? sunset;
-  double? sunsetEpoch;
+  int? sunsetEpoch;
   double? moonphase;
   double? tempmax;
   double? tempmin;
@@ -169,9 +169,9 @@ class Conditions {
           json['stations'] != null ? List<String>.from(json['stations']) : null,
       source: json['source'],
       sunrise: json['sunrise'],
-      sunriseEpoch: json['sunriseEpoch']?.toDouble(),
+      sunriseEpoch: json['sunriseEpoch'],
       sunset: json['sunset'],
-      sunsetEpoch: json['sunsetEpoch']?.toDouble(),
+      sunsetEpoch: json['sunsetEpoch'],
       moonphase: json['moonphase']?.toDouble(),
       tempmax: json['tempmax']?.toDouble(),
       tempmin: json['tempmin']?.toDouble(),
