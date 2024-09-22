@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:top_weather/core/locator.dart';
 import 'package:top_weather/models/weather_data.dart';
 import 'package:top_weather/services/weather_service.dart';
 import 'package:top_weather/widgets/forecast_hero.dart';
+import 'package:top_weather/widgets/sunrise_sunset_card.dart';
 import 'package:top_weather/widgets/timeline_card.dart';
+import 'package:top_weather/widgets/week_card.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -77,7 +81,15 @@ class _HomepageState extends State<Homepage> {
                   currentDayConditions: data.days[0],
                 ),
                 if (data.days[0].hours != null)
-                  TimelineCard(_getNext24Hours(data.days[0], data.days[1]))
+                  TimelineCard(_getNext24Hours(data.days[0], data.days[1])),
+                const SizedBox(
+                  height: 10,
+                ),
+                WeekCard(_getNext7Days(data)),
+                const SizedBox(
+                  height: 10,
+                ),
+                SunriseSunsetCard(data.currentConditions),
               ],
             ),
           );
@@ -85,6 +97,10 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+}
+
+List<Conditions> _getNext7Days(WeatherData data) {
+  return data.days.sublist(0, min(data.days.length, 7));
 }
 
 List<Conditions> _getNext24Hours(Conditions today, Conditions tomorrow) {
