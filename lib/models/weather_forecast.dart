@@ -11,6 +11,9 @@ class WeatherForecast {
   HourlyForecast? hourlyForecast;
   DailyForecast? dailyForecast;
 
+  bool _empty = false;
+  bool get empty => _empty;
+
   WeatherForecast({
     required this.currentLocation,
     required this.icon,
@@ -24,6 +27,17 @@ class WeatherForecast {
     this.hourlyForecast,
     this.dailyForecast,
   });
+
+  factory WeatherForecast.empty() => WeatherForecast(
+        currentLocation: '',
+        icon: '',
+        description: '',
+        nowTemperature: 0,
+        todayMinTemperature: 0,
+        todayMaxTemperature: 0,
+        feelsLikeTemperature: 0,
+        lastUpdated: DateTime(2001, 7, 4),
+      ).._empty = true;
 }
 
 class SunriseSunset {
