@@ -32,10 +32,10 @@ class WeatherService {
   }
 
   Future<WeatherData> _getWeatherData(Uri url) async {
-    // final response = await http.get(url);
-    // final decodedJson = json.decode(response.body);
-    await Future.delayed(const Duration(seconds: 1));
-    final decodedJson = json.decode(mockRsponse);
+    final response = await http.get(url);
+    final decodedJson = json.decode(response.body);
+    // await Future.delayed(const Duration(seconds: 1));
+    // final decodedJson = json.decode(mockRsponse);
 
     final data = WeatherData.fromJson(decodedJson);
     return data;
