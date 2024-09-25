@@ -10,27 +10,31 @@ class PrecipitationProbability extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(
-          Icons.water_drop,
-          size: 12,
-          color:
-              Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(.7),
-        ),
-        const SizedBox(
-          width: 2,
-        ),
-        Text(
-          '$probability%',
-          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              color: Theme.of(context)
-                  .colorScheme
-                  .onPrimaryContainer
-                  .withOpacity(.7)),
-        )
-      ],
-    );
+    return probability > 0
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.water_drop,
+                size: 12,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onPrimaryContainer
+                    .withOpacity(.7),
+              ),
+              const SizedBox(
+                width: 2,
+              ),
+              Text(
+                '$probability%',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onPrimaryContainer
+                        .withOpacity(.7)),
+              )
+            ],
+          )
+        : const SizedBox.shrink();
   }
 }

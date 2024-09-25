@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/core/app_images.dart';
 import 'package:top_weather/core/date_utils.dart';
-import 'package:top_weather/models/weather_data.dart';
+import 'package:top_weather/models/weather_forecast.dart';
 import 'package:top_weather/widgets/precipitation_probability.dart';
 
 class TimelineCard extends StatelessWidget {
-  const TimelineCard(
-    this.hours, {
+  const TimelineCard({
     super.key,
+    required this.hourlyForecast,
   });
 
-  final List<Conditions> hours;
+  final HourlyForecast hourlyForecast;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +23,10 @@ class TimelineCard extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: hours
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: hourlyForecast.hours
                 .map(
-                  (hourConditions) =>
-                      _hourTileForecast(hourConditions, context),
+                  (hourForecast) => _hourForecastTile(hourForecast, context),
                 )
                 .toList(),
           ),
@@ -36,7 +36,7 @@ class TimelineCard extends StatelessWidget {
   }
 }
 
-Widget _hourTileForecast(Conditions conditions, BuildContext context) {
+Widget _hourForecastTile(HourForecast hourForecast, BuildContext context) {
   final theme = Theme.of(context);
 
   return Padding(
@@ -44,7 +44,7 @@ Widget _hourTileForecast(Conditions conditions, BuildContext context) {
     child: Column(
       children: [
         Text(
-          toTime(conditions.datetimeEpoch),
+          timeFormatter.format(hourForecast.datetime),
           style: theme.textTheme.bodyMedium!.copyWith(
               color: theme.colorScheme.onPrimaryContainer.withOpacity(.7)),
         ),
@@ -52,7 +52,7 @@ Widget _hourTileForecast(Conditions conditions, BuildContext context) {
           height: 10,
         ),
         SvgPicture.asset(
-          AppImages.iconPathByName(conditions.icon),
+          AppImages.iconPathByName(hourForecast.icon),
           height: 30,
           width: 30,
         ),
@@ -60,14 +60,15 @@ Widget _hourTileForecast(Conditions conditions, BuildContext context) {
           height: 10,
         ),
         Text(
-          '${conditions.temp}°',
+          '${hourForecast.temperature}°',
           style: theme.textTheme.bodyMedium!
               .copyWith(color: theme.colorScheme.onPrimaryContainer),
         ),
         const SizedBox(
           height: 5,
         ),
-        PrecipitationProbability(conditions.precipprob.round())
+        if (hourForecast.precipitationProbability != null)
+          PrecipitationProbability(hourForecast.precipitationProbability!)
       ],
     ),
   );

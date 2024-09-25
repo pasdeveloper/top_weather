@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/core/app_images.dart';
 import 'package:top_weather/core/date_utils.dart';
-import 'package:top_weather/models/weather_data.dart';
+import 'package:top_weather/models/weather_forecast.dart';
 import 'package:top_weather/widgets/precipitation_probability.dart';
 
 class WeekCard extends StatelessWidget {
-  const WeekCard(
-    this.days, {
+  const WeekCard({
+    required this.dailyForecast,
     super.key,
   });
 
-  final List<Conditions> days;
+  final DailyForecast dailyForecast;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,9 @@ class WeekCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
-            children: days
+            children: dailyForecast.days
                 .map(
-                  (dayCondition) => _dayTileForecast(dayCondition, context),
+                  (dayForecast) => _dayTileForecast(dayForecast, context),
                 )
                 .toList(),
           ),
@@ -33,7 +33,7 @@ class WeekCard extends StatelessWidget {
     );
   }
 
-  Widget _dayTileForecast(Conditions conditions, BuildContext context) {
+  Widget _dayTileForecast(DayForecast dayForecast, BuildContext context) {
     final theme = Theme.of(context);
 
     return Padding(
@@ -41,17 +41,18 @@ class WeekCard extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            toDayName(conditions.datetimeEpoch),
+            dayNameFormatter.format(dayForecast.datetime),
             style: theme.textTheme.titleLarge!
                 .copyWith(color: theme.colorScheme.onPrimaryContainer),
           ),
           const Spacer(),
-          PrecipitationProbability(conditions.precipprob.round()),
+          if (dayForecast.precipitationProbability != null)
+            PrecipitationProbability(dayForecast.precipitationProbability!),
           const SizedBox(
             width: 10,
           ),
           SvgPicture.asset(
-            AppImages.iconPathByName(conditions.icon),
+            AppImages.iconPathByName(dayForecast.icon),
             height: 30,
             width: 30,
           ),
@@ -59,7 +60,7 @@ class WeekCard extends StatelessWidget {
             width: 10,
           ),
           Text(
-            '${conditions.tempmin}°',
+            '${dayForecast.minTemperature}°',
             style: theme.textTheme.bodyLarge!.copyWith(color: Colors.lightBlue),
           ),
           Text(
@@ -67,7 +68,7 @@ class WeekCard extends StatelessWidget {
             style: theme.textTheme.bodyLarge,
           ),
           Text(
-            '${conditions.tempmax}°',
+            '${dayForecast.maxTemperature}°',
             style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
           ),
         ],

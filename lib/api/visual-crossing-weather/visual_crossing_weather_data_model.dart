@@ -1,4 +1,4 @@
-class WeatherData {
+class VisualCrossingWeatherDataModel {
   double queryCost;
   double latitude;
   double longitude;
@@ -12,7 +12,7 @@ class WeatherData {
   Map<String, Station> stations;
   Conditions currentConditions;
 
-  WeatherData({
+  VisualCrossingWeatherDataModel({
     required this.queryCost,
     required this.latitude,
     required this.longitude,
@@ -27,8 +27,8 @@ class WeatherData {
     required this.currentConditions,
   });
 
-  factory WeatherData.fromJson(Map<String, dynamic> json) {
-    return WeatherData(
+  factory VisualCrossingWeatherDataModel.fromJson(Map<String, dynamic> json) {
+    return VisualCrossingWeatherDataModel(
       queryCost: json['queryCost'].toDouble(),
       latitude: json['latitude'].toDouble(),
       longitude: json['longitude'].toDouble(),

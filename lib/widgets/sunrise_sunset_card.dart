@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top_weather/core/app_images.dart';
 import 'package:top_weather/core/date_utils.dart';
-import 'package:top_weather/models/weather_data.dart';
+import 'package:top_weather/models/weather_forecast.dart';
 
 class SunriseSunsetCard extends StatelessWidget {
-  const SunriseSunsetCard(this.conditions, {super.key});
+  const SunriseSunsetCard({super.key, required this.sunriseSunset});
 
-  final Conditions conditions;
+  final SunriseSunset sunriseSunset;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,7 @@ class SunriseSunsetCard extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Text(
-                      conditions.sunriseEpoch == null
-                          ? 'Unknown'
-                          : toTime(conditions.sunriseEpoch!),
+                      timeFormatter.format(sunriseSunset.sunrise),
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer),
@@ -56,9 +54,7 @@ class SunriseSunsetCard extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Text(
-                      conditions.sunsetEpoch == null
-                          ? 'Unknown'
-                          : toTime(conditions.sunsetEpoch!),
+                      timeFormatter.format(sunriseSunset.sunset),
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer),
