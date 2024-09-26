@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class WeatherLocation extends Equatable {
+class Location extends Equatable {
   final String name;
   final double latitude;
   final double longitude;
   final String id;
 
-  WeatherLocation({
+  Location({
     required this.name,
     required this.latitude,
     required this.longitude,
@@ -17,7 +17,7 @@ class WeatherLocation extends Equatable {
 
   @override
   String toString() {
-    return 'WeatherLocation(name: $name, latitude: $latitude, longitude: $longitude, id: $id)';
+    return 'Location(name: $name, latitude: $latitude, longitude: $longitude, id: $id)';
   }
 
   Map<String, dynamic> toMap() {
@@ -29,8 +29,8 @@ class WeatherLocation extends Equatable {
     };
   }
 
-  factory WeatherLocation.fromMap(Map<String, dynamic> map) {
-    return WeatherLocation(
+  factory Location.fromMap(Map<String, dynamic> map) {
+    return Location(
       name: map['name'] ?? '',
       latitude: map['latitude']?.toDouble() ?? 0.0,
       longitude: map['longitude']?.toDouble() ?? 0.0,

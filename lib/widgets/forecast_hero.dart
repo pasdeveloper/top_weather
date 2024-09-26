@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top_weather/core/app_images.dart';
 import 'package:top_weather/core/date_formatting.dart';
-import 'package:top_weather/models/weather_forecast.dart';
+import 'package:top_weather/models/forecast.dart';
 
 class ForecastHero extends StatelessWidget {
   const ForecastHero({
@@ -10,7 +10,7 @@ class ForecastHero extends StatelessWidget {
     required this.forecast,
   });
 
-  final WeatherForecast forecast;
+  final Forecast forecast;
 
   @override
   Widget build(BuildContext context) {

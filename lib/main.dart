@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:top_weather/blocs/weather_forecast/weather_forecast_bloc.dart';
-import 'package:top_weather/blocs/weather_location/weather_location_bloc.dart';
+import 'package:top_weather/bloc/forecast/forecast_cubit.dart';
+import 'package:top_weather/bloc/locations/locations_cubit.dart';
+import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
 import 'package:top_weather/screens/homepage.dart';
 import 'package:top_weather/weather_sources/visual-crossing-weather/repository/visual_crossing_weather_repository.dart';
 
@@ -20,11 +21,19 @@ void main() async {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
-          create: (context) => WeatherForecastBloc(
-              weatherRepository: VisualCrossingWeatherRepository())),
+        create: (context) => ForecastCubit(
+          VisualCrossingWeatherRepository(),
+        ),
+      ),
       BlocProvider(
-          create: (context) => WeatherLocationBloc(
-              weatherRepository: VisualCrossingWeatherRepository())),
+        create: (context) => LocationsCubit(
+          VisualCrossingWeatherRepository(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) =>
+            SelectedLocationBloc()..add(TriggerListenerEvent()),
+      )
     ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,

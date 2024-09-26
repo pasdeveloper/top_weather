@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:top_weather/blocs/weather_forecast/weather_forecast_bloc.dart';
-import 'package:top_weather/models/weather_forecast.dart';
-import 'package:top_weather/models/weather_location.dart';
+import 'package:top_weather/bloc/forecast/forecast_cubit.dart';
+import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
+import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/location.dart';
 import 'package:top_weather/screens/locations.dart';
 import 'package:top_weather/widgets/forecast_hero.dart';
 import 'package:top_weather/widgets/sunrise_sunset_card.dart';
@@ -12,45 +13,56 @@ import 'package:top_weather/widgets/week_card.dart';
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
 
-  void _onSelectLocation(BuildContext context) async {
-    final selectedLocation = await Navigator.push<WeatherLocation>(
+  void _openLocations(BuildContext context) async {
+    Navigator.push<Location>(
         context,
         MaterialPageRoute(
           builder: (context) => const Locations(),
         ));
-    if (selectedLocation == null || !context.mounted) return;
-    context
-        .read<WeatherForecastBloc>()
-        .add(GetLocationForecastEvent(location: selectedLocation));
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<WeatherForecastBloc>().state;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(state.status == WeatherForecastStatus.complete
-            ? state.forecast.currentLocation
-            : 'Top Weather'),
-        actions: [
-          IconButton(
-              onPressed: () => _onSelectLocation(context),
-              icon: const Icon(Icons.location_on))
-        ],
-      ),
-      body: switch (state.status) {
-        WeatherForecastStatus.empty => _emptyWeather(context),
-        WeatherForecastStatus.loading => _loading(),
-        WeatherForecastStatus.complete => _body(state.forecast),
-        // WeatherForecastStatus.error =>
-        //   state.forecast.empty ? _emptyWeather() : _body(state.forecast),
+    final state = context.watch<ForecastCubit>().state;
+    return BlocListener<SelectedLocationBloc, SelectedLocationState>(
+      listener: (context, selectedLocationState) {
+        if (selectedLocationState.selectedLocation != null) {
+          context
+              .read<ForecastCubit>()
+              .fetchForecast(selectedLocationState.selectedLocation!);
+        } else {
+          context.read<ForecastCubit>().emptyForecast();
+        }
       },
+      child: Scaffold(
+          appBar: AppBar(
+            // backgroundColor: Colors.transparent,
+            // systemOverlayStyle: SystemUiOverlayStyle.dark,
+            title: Text(context
+                    .watch<SelectedLocationBloc>()
+                    .state
+                    .selectedLocation
+                    ?.name ??
+                'Top Weather'),
+            actions: [
+              IconButton(
+                  onPressed: () => _openLocations(context),
+                  icon: const Icon(Icons.list)),
+            ],
+          ),
+          body: switch (state.status) {
+            ForecastStatus.empty => _emptyWeather(context),
+            ForecastStatus.loading => _loading(),
+            ForecastStatus.ok => _body(state.forecast),
+            ForecastStatus.error => state.forecast.empty
+                ? _emptyWeather(context)
+                : _body(state.forecast),
+          }),
     );
   }
 }
 
-Widget _body(WeatherForecast forecast) => SingleChildScrollView(
+Widget _body(Forecast forecast) => SingleChildScrollView(
       padding: const EdgeInsets.all(12),
       child: Column(
         children: [

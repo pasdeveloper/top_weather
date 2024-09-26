@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:top_weather/blocs/weather_location/weather_location_bloc.dart';
+import 'package:top_weather/bloc/locations/locations_cubit.dart';
 
 class AddLocationWidget extends StatefulWidget {
   const AddLocationWidget({super.key});
@@ -15,6 +15,8 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final searchLoading =
+        context.watch<LocationsCubit>().state.status == LocationsStatus.loading;
     return Form(
       key: _form,
       child: Row(
@@ -35,10 +37,12 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
           const SizedBox(
             width: 10,
           ),
-          IconButton.filled(
-            onPressed: _submitLocation,
-            icon: const Icon(Icons.search),
-          ),
+          searchLoading
+              ? const CircularProgressIndicator.adaptive()
+              : IconButton.filled(
+                  onPressed: _submitLocation,
+                  icon: const Icon(Icons.search),
+                ),
         ],
       ),
     );
@@ -62,9 +66,7 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
     _form.currentState!.reset();
   }
 
-  void _searchLocation(String name) {
-    context
-        .read<WeatherLocationBloc>()
-        .add(AddWeatherLocationEvent(name: name));
+  void _searchLocation(String locationName) {
+    context.read<LocationsCubit>().searchAndAddLocation(locationName);
   }
 }

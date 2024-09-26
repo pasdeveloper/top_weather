@@ -5,8 +5,8 @@ import 'dart:math';
 // ignore: unused_import
 import 'package:http/http.dart' as http;
 import 'package:top_weather/core/http_harror_handling.dart';
-import 'package:top_weather/models/weather_forecast.dart';
-import 'package:top_weather/models/weather_location.dart';
+import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/location.dart';
 import 'package:top_weather/repository/weather_repository.dart';
 import 'package:top_weather/weather_sources/visual-crossing-weather/exceptions/data_fetch_exception.dart';
 import 'package:top_weather/weather_sources/visual-crossing-weather/models/conditions.dart';
@@ -23,9 +23,8 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
   );
 
   @override
-  Future<WeatherForecast> getWeatherForecastByCoordinates(
-      {required double latitude, required double longitude}) async {
-    final url = _getLatLonUri(latitude, longitude);
+  Future<Forecast> fetchWeatherForecast(Location location) async {
+    final url = _getLatLonUri(location.latitude, location.longitude);
 
     final data = await _getWeatherData(url);
     final forecast = _toWeatherForecast(data);
@@ -33,21 +32,11 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
   }
 
   @override
-  Future<WeatherForecast> getWeatherForecastByLocationName(
-      String locationName) async {
-    final url = _getLocationNameUri(locationName);
-
-    final data = await _getWeatherData(url);
-    final forecast = _toWeatherForecast(data);
-    return forecast;
-  }
-
-  @override
-  Future<WeatherLocation?> searchWeatherLocation({required String name}) async {
+  Future<Location?> searchWeatherLocation(String name) async {
     final url = _getLocationNameUri(name);
     try {
       final data = await _getWeatherData(url);
-      return WeatherLocation(
+      return Location(
         name: data.resolvedAddress,
         latitude: data.latitude,
         longitude: data.longitude,
@@ -91,7 +80,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
     return data;
   }
 
-  WeatherForecast _toWeatherForecast(WeatherData data) {
+  Forecast _toWeatherForecast(WeatherData data) {
     final sunriseSunset = SunriseSunset(
       sunrise: DateTime.fromMillisecondsSinceEpoch(
           data.currentConditions.sunriseEpoch! * 1000),
@@ -102,7 +91,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
     final hours = _getNext24Hours(data);
     final days = _getNext7Days(data);
 
-    return WeatherForecast(
+    return Forecast(
       currentLocation: data.resolvedAddress,
       icon: data.currentConditions.icon,
       description: data.currentConditions.conditions,

@@ -1,4 +1,4 @@
-class WeatherForecast {
+class Forecast {
   final String currentLocation;
   final String icon;
   final String description;
@@ -14,7 +14,7 @@ class WeatherForecast {
   bool _empty = false;
   bool get empty => _empty;
 
-  WeatherForecast({
+  Forecast({
     required this.currentLocation,
     required this.icon,
     required this.description,
@@ -28,7 +28,7 @@ class WeatherForecast {
     this.dailyForecast,
   });
 
-  factory WeatherForecast.empty() => WeatherForecast(
+  factory Forecast.empty() => Forecast(
         currentLocation: '',
         icon: '',
         description: '',
