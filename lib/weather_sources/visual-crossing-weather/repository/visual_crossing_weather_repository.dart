@@ -4,9 +4,13 @@ import 'dart:math';
 
 // ignore: unused_import
 import 'package:http/http.dart' as http;
-import 'package:top_weather/api/visual-crossing-weather/visual_crossing_weather_data_model.dart';
+import 'package:top_weather/core/http_harror_handling.dart';
 import 'package:top_weather/models/weather_forecast.dart';
+import 'package:top_weather/models/weather_location.dart';
 import 'package:top_weather/repository/weather_repository.dart';
+import 'package:top_weather/weather_sources/visual-crossing-weather/exceptions/data_fetch_exception.dart';
+import 'package:top_weather/weather_sources/visual-crossing-weather/models/conditions.dart';
+import 'package:top_weather/weather_sources/visual-crossing-weather/models/weather_data.dart';
 
 class VisualCrossingWeatherRepository implements WeatherRepository {
   final _baseUrl = Uri.https(
@@ -19,13 +23,41 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
   );
 
   @override
-  Future<WeatherForecast> getWeatherForecast(
+  Future<WeatherForecast> getWeatherForecastByCoordinates(
       {required double latitude, required double longitude}) async {
     final url = _getLatLonUri(latitude, longitude);
 
     final data = await _getWeatherData(url);
     final forecast = _toWeatherForecast(data);
     return forecast;
+  }
+
+  @override
+  Future<WeatherForecast> getWeatherForecastByLocationName(
+      String locationName) async {
+    final url = _getLocationNameUri(locationName);
+
+    final data = await _getWeatherData(url);
+    final forecast = _toWeatherForecast(data);
+    return forecast;
+  }
+
+  @override
+  Future<WeatherLocation?> searchWeatherLocation({required String name}) async {
+    final url = _getLocationNameUri(name);
+    try {
+      final data = await _getWeatherData(url);
+      return WeatherLocation(
+        name: data.resolvedAddress,
+        latitude: data.latitude,
+        longitude: data.longitude,
+      );
+    } on DataFetchException catch (e) {
+      if (e.reason == DataFetchExceptionReason.dataNotFound) return null;
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Uri _getLatLonUri(double latitude, double longitude) => _baseUrl.replace(
@@ -35,17 +67,31 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
   Uri _getLocationNameUri(String name) =>
       _baseUrl.replace(path: '${_baseUrl.path}/$name');
 
-  Future<VisualCrossingWeatherDataModel> _getWeatherData(Uri url) async {
+  Future<WeatherData> _getWeatherData(Uri url) async {
     final response = await http.get(url);
-    final decodedJson = json.decode(response.body);
-    // await Future.delayed(const Duration(milliseconds: 1000));
-    // final decodedJson = json.decode(mockData);
 
-    final data = VisualCrossingWeatherDataModel.fromJson(decodedJson);
+    if (response.statusCode == 400) {
+      throw DataFetchException(
+          message: httpErrorToMessage(response),
+          reason: DataFetchExceptionReason.dataNotFound);
+    }
+
+    if (response.statusCode == 429) {
+      // TODO: superato limite di richieste
+    }
+
+    if (response.statusCode != 200) {
+      throw DataFetchException(
+          message: httpErrorToMessage(response),
+          reason: DataFetchExceptionReason.other);
+    }
+    final decodedJson = json.decode(response.body);
+
+    final data = WeatherData.fromMap(decodedJson);
     return data;
   }
 
-  WeatherForecast _toWeatherForecast(VisualCrossingWeatherDataModel data) {
+  WeatherForecast _toWeatherForecast(WeatherData data) {
     final sunriseSunset = SunriseSunset(
       sunrise: DateTime.fromMillisecondsSinceEpoch(
           data.currentConditions.sunriseEpoch! * 1000),
@@ -75,7 +121,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
     );
   }
 
-  List<HourForecast> _getNext24Hours(VisualCrossingWeatherDataModel data) {
+  List<HourForecast> _getNext24Hours(WeatherData data) {
     if (data.days.isEmpty) return [];
     final todaysHours = data.days[0].hours ?? <Conditions>[];
     final tomorrowsHours = data.days.length > 1
@@ -94,13 +140,13 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
             temperature: hourData.temp,
             icon: hourData.icon,
             description: hourData.conditions,
-            precipitationProbability: hourData.precipprob.round(),
+            precipitationProbability: hourData.precipprob?.round(),
           ),
         )
         .toList();
   }
 
-  List<DayForecast> _getNext7Days(VisualCrossingWeatherDataModel data) {
+  List<DayForecast> _getNext7Days(WeatherData data) {
     return data.days
         .sublist(0, min(data.days.length, 7))
         .map(
@@ -110,7 +156,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
             minTemperature: dayData.tempmin!,
             maxTemperature: dayData.tempmax!,
             icon: dayData.icon,
-            precipitationProbability: dayData.precipprob.round(),
+            precipitationProbability: dayData.precipprob?.round(),
           ),
         )
         .toList();

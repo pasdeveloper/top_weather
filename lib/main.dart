@@ -1,19 +1,35 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:top_weather/api/visual-crossing-weather/visual_crossing_weather_repository.dart';
-import 'package:top_weather/blocs/bloc/weather_forecast_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:top_weather/blocs/weather_forecast/weather_forecast_bloc.dart';
+import 'package:top_weather/blocs/weather_location/weather_location_bloc.dart';
 import 'package:top_weather/screens/homepage.dart';
+import 'package:top_weather/weather_sources/visual-crossing-weather/repository/visual_crossing_weather_repository.dart';
 
 final _theme =
     ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue));
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: BlocProvider(
-      create: (context) => WeatherForecastBloc(
-          weatherService: VisualCrossingWeatherRepository()),
-      child: const Homepage(),
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getApplicationDocumentsDirectory(),
+  );
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+          create: (context) => WeatherForecastBloc(
+              weatherRepository: VisualCrossingWeatherRepository())),
+      BlocProvider(
+          create: (context) => WeatherLocationBloc(
+              weatherRepository: VisualCrossingWeatherRepository())),
+    ],
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const Homepage(),
+      theme: _theme,
     ),
-    theme: _theme,
   ));
 }

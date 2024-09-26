@@ -1,5 +1,7 @@
 part of 'weather_forecast_bloc.dart';
 
+enum WeatherForecastStatus { empty, loading, complete }
+
 class WeatherForecastState extends Equatable {
   final WeatherForecast forecast;
   final WeatherForecastStatus status;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top_weather/core/app_images.dart';
-import 'package:top_weather/core/date_utils.dart';
+import 'package:top_weather/core/date_formatting.dart';
 import 'package:top_weather/models/weather_forecast.dart';
 
 class ForecastHero extends StatelessWidget {
