@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:top_weather/core/app_images.dart';
-import 'package:top_weather/core/date_formatting.dart';
+import 'package:top_weather/constants/app_images.dart';
+import 'package:top_weather/constants/date_formatting.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/widgets/precipitation_probability.dart';
 

@@ -1,0 +1,19 @@
+<svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Weather / Morning / Clear / 1 " clip-path="url(#clip0_2_223)">
+<rect width="84" height="84" fill="url(#paint0_linear_2_223)"/>
+<path id="Path 51" fill-rule="evenodd" clip-rule="evenodd" d="M-18 55.4513C-18 55.4513 -6.08803 48 2.90928 48C14.8106 48 22.7679 58.1623 32.3949 58.1623C43.6149 58.1623 45.0267 55.2257 51.3184 55.2257C60.2108 55.2257 71.9473 60.7322 78.1368 58.7448C83.1317 57.141 89.1448 53.9018 89.1448 53.9018V81.1014L-18 82.7361V55.4513Z" fill="#40A4FF"/>
+<path id="Path 51_2" fill-rule="evenodd" clip-rule="evenodd" d="M88.2007 74.6237C88.2007 74.6237 87.6575 57.5116 75.3437 54.8359C64.5775 53.2447 56.2771 65.5951 46.65 65.5951C35.4301 65.5951 30.1424 58.4275 19.249 58.4275C11.3039 58.4275 3.54563 64.659 -7.27374 62.499C-10.8727 61.7805 -16.2341 60.544 -16.2341 60.544L-16.0558 84.1216L88.2007 85.7123V74.6237Z" fill="#0EDAA4"/>
+<path id="Path 51_3" fill-rule="evenodd" clip-rule="evenodd" d="M-10 89.3429C-10 89.3429 -9.35506 66.7239 5.26563 63.1871C18.0488 61.0838 27.9043 77.4087 39.3349 77.4087C52.6569 77.4087 58.9351 67.9345 71.8694 67.9345C81.303 67.9345 90.5147 76.1715 103.361 73.3163C107.634 72.3665 114 70.7321 114 70.7321L113.788 101.897L-10 104V89.3429Z" fill="#DAB65A"/>
+<circle id="Oval 1" cx="52" cy="20" r="7" fill="#FAC555"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_2_223" x1="0" y1="0" x2="0" y2="84" gradientUnits="userSpaceOnUse">
+<stop stop-color="#71DDFF"/>
+<stop offset="0.661458" stop-color="#B7EEFF"/>
+<stop offset="0.807292" stop-color="#C4F1FF"/>
+</linearGradient>
+<clipPath id="clip0_2_223">
+<rect width="84" height="84" fill="white"/>
+</clipPath>
+</defs>
+</svg>

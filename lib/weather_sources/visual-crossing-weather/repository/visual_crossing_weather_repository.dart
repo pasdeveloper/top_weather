@@ -13,6 +13,7 @@ import 'package:top_weather/weather_sources/visual-crossing-weather/models/condi
 import 'package:top_weather/weather_sources/visual-crossing-weather/models/weather_data.dart';
 
 class VisualCrossingWeatherRepository implements WeatherRepository {
+  // TODO: capire locale delle varie location
   final _baseUrl = Uri.https(
     'weather.visualcrossing.com',
     'VisualCrossingWebServices/rest/services/timeline',
@@ -81,12 +82,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
   }
 
   Forecast _toWeatherForecast(WeatherData data) {
-    final sunriseSunset = SunriseSunset(
-      sunrise: DateTime.fromMillisecondsSinceEpoch(
-          data.currentConditions.sunriseEpoch! * 1000),
-      sunset: DateTime.fromMillisecondsSinceEpoch(
-          data.currentConditions.sunsetEpoch! * 1000),
-    );
+    final sunriseSunset = _getNextSunriseSunset(data);
 
     final hours = _getNext24Hours(data);
     final days = _getNext7Days(data);
@@ -99,8 +95,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       todayMinTemperature: data.days[0].tempmin ?? 0,
       todayMaxTemperature: data.days[0].tempmax ?? 0,
       feelsLikeTemperature: data.currentConditions.feelslike,
-      lastUpdated: DateTime.fromMillisecondsSinceEpoch(
-          data.currentConditions.datetimeEpoch * 1000),
+      lastUpdated: _toDateTime(data.currentConditions.datetimeEpoch),
       sunriseSunset: sunriseSunset,
       hourlyForecast: HourlyForecast.withSunriseSunset(
         hours: hours,
@@ -108,6 +103,30 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       ),
       dailyForecast: DailyForecast(days: days),
     );
+  }
+
+  SunriseSunset _getNextSunriseSunset(WeatherData data) {
+    final now = _toDateTime(data.currentConditions.datetimeEpoch);
+    DateTime? nextSunriseDateTime =
+        _toDateTime(data.currentConditions.sunriseEpoch!);
+    if (nextSunriseDateTime.isBefore(now)) {
+      nextSunriseDateTime =
+          data.days.length > 1 ? _toDateTime(data.days[1].sunriseEpoch!) : null;
+    }
+    DateTime? nextSunsetDateTime =
+        _toDateTime(data.currentConditions.sunsetEpoch!);
+    if (nextSunsetDateTime.isBefore(now)) {
+      nextSunsetDateTime =
+          data.days.length > 1 ? _toDateTime(data.days[1].sunsetEpoch!) : null;
+    }
+    return SunriseSunset(
+      sunrise: nextSunriseDateTime,
+      sunset: nextSunsetDateTime,
+    );
+  }
+
+  DateTime _toDateTime(int seconds) {
+    return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
   }
 
   List<HourForecast> _getNext24Hours(WeatherData data) {
@@ -124,8 +143,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
             max(currentHour, 0), min(todayAndTomorrow.length, currentHour + 24))
         .map(
           (hourData) => HourForecast(
-            datetime: DateTime.fromMillisecondsSinceEpoch(
-                hourData.datetimeEpoch * 1000),
+            datetime: _toDateTime(hourData.datetimeEpoch),
             temperature: hourData.temp,
             icon: hourData.icon,
             description: hourData.conditions,
@@ -140,8 +158,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
         .sublist(0, min(data.days.length, 7))
         .map(
           (dayData) => DayForecast(
-            datetime: DateTime.fromMillisecondsSinceEpoch(
-                dayData.datetimeEpoch * 1000),
+            datetime: _toDateTime(dayData.datetimeEpoch),
             minTemperature: dayData.tempmin!,
             maxTemperature: dayData.tempmax!,
             icon: dayData.icon,

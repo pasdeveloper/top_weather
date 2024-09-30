@@ -1,22 +1,26 @@
 class Forecast {
   final String currentLocation;
-  final String icon;
+  final String? icon;
   final String description;
   final double nowTemperature;
   final double todayMinTemperature;
   final double todayMaxTemperature;
   final double feelsLikeTemperature;
+  final int nowTemperatureRound;
+  final int todayMinTemperatureRound;
+  final int todayMaxTemperatureRound;
+  final int feelsLikeTemperatureRound;
   final DateTime lastUpdated;
-  SunriseSunset? sunriseSunset;
-  HourlyForecast? hourlyForecast;
-  DailyForecast? dailyForecast;
+  final SunriseSunset? sunriseSunset;
+  final HourlyForecast? hourlyForecast;
+  final DailyForecast? dailyForecast;
 
   bool _empty = false;
   bool get empty => _empty;
 
   Forecast({
     required this.currentLocation,
-    required this.icon,
+    this.icon,
     required this.description,
     required this.nowTemperature,
     required this.todayMinTemperature,
@@ -26,11 +30,13 @@ class Forecast {
     this.sunriseSunset,
     this.hourlyForecast,
     this.dailyForecast,
-  });
+  })  : nowTemperatureRound = nowTemperature.round(),
+        todayMinTemperatureRound = todayMinTemperature.round(),
+        todayMaxTemperatureRound = todayMaxTemperature.round(),
+        feelsLikeTemperatureRound = feelsLikeTemperature.round();
 
   factory Forecast.empty() => Forecast(
         currentLocation: '',
-        icon: '',
         description: '',
         nowTemperature: 0,
         todayMinTemperature: 0,
@@ -41,11 +47,11 @@ class Forecast {
 }
 
 class SunriseSunset {
-  final DateTime sunrise;
-  final DateTime sunset;
+  final DateTime? sunrise;
+  final DateTime? sunset;
   SunriseSunset({
-    required this.sunrise,
-    required this.sunset,
+    this.sunrise,
+    this.sunset,
   });
 }
 
@@ -56,21 +62,48 @@ class HourlyForecast {
     required this.hours,
   });
 
-// TODO: inserire sunrise, sunset
   factory HourlyForecast.withSunriseSunset({
     required List<HourForecast> hours,
     required SunriseSunset sunriseSunset,
   }) {
-    return HourlyForecast(hours: hours);
+    final hours_ = List.of(hours);
+
+    if (sunriseSunset.sunrise != null) {
+      final sunriseIndex = hours_.indexWhere(
+        (hour) => sunriseSunset.sunrise!.isBefore(hour.datetime),
+      );
+      if (sunriseIndex >= 0) {
+        hours_.insert(sunriseIndex,
+            HourForecast.sunrise(datetime: sunriseSunset.sunrise));
+      } else {
+        hours_.add(HourForecast.sunrise(datetime: sunriseSunset.sunrise));
+      }
+    }
+    if (sunriseSunset.sunset != null) {
+      final sunsetIndex = hours_.indexWhere(
+        (hour) => sunriseSunset.sunset!.isBefore(hour.datetime),
+      );
+      if (sunsetIndex >= 0) {
+        hours_.insert(
+            sunsetIndex, HourForecast.sunset(datetime: sunriseSunset.sunset));
+      } else {
+        hours_.add(HourForecast.sunset(datetime: sunriseSunset.sunset));
+      }
+    }
+    return HourlyForecast(hours: hours_);
   }
 }
 
 class HourForecast {
   final DateTime datetime;
   final double? temperature;
+  final int? temperatureRound;
   final String icon;
-  final String? description;
+  final String description;
   final int? precipitationProbability;
+
+  bool _sunriseSunset;
+  bool get sunriseSunset => _sunriseSunset;
 
   HourForecast({
     required this.datetime,
@@ -78,19 +111,22 @@ class HourForecast {
     required this.icon,
     required this.description,
     this.precipitationProbability,
-  });
+  })  : temperatureRound = temperature?.round(),
+        _sunriseSunset = false;
 
-  HourForecast.sunrise({required this.datetime})
-      : icon = 'sunrise',
-        description = null,
-        precipitationProbability = null,
-        temperature = null;
+  factory HourForecast.sunrise({required datetime}) => HourForecast(
+        datetime: datetime,
+        temperature: null,
+        icon: 'sunrise',
+        description: 'Sunrise',
+      ).._sunriseSunset = true;
 
-  HourForecast.sunset({required this.datetime})
-      : icon = 'sunset',
-        description = null,
-        precipitationProbability = null,
-        temperature = null;
+  factory HourForecast.sunset({required datetime}) => HourForecast(
+        datetime: datetime,
+        temperature: null,
+        icon: 'sunset',
+        description: 'Sunset',
+      ).._sunriseSunset = true;
 }
 
 class DailyForecast {
@@ -105,6 +141,8 @@ class DayForecast {
   final DateTime datetime;
   final double minTemperature;
   final double maxTemperature;
+  final int minTemperatureRound;
+  final int maxTemperatureRound;
   final String icon;
   final int? precipitationProbability;
 
@@ -114,5 +152,6 @@ class DayForecast {
     required this.maxTemperature,
     required this.icon,
     this.precipitationProbability,
-  });
+  })  : minTemperatureRound = minTemperature.round(),
+        maxTemperatureRound = maxTemperature.round();
 }
