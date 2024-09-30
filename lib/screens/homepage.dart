@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:top_weather/bloc/forecast/forecast_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
+import 'package:top_weather/bloc/theme/theme_cubit.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/screens/locations.dart';
@@ -46,6 +47,15 @@ class Homepage extends StatelessWidget {
                 'Top Weather'),
             actions: [
               IconButton(
+                  onPressed: () {
+                    final themeCubit = context.read<ThemeCubit>();
+                    final currentTheme = themeCubit.state.themeMode;
+                    themeCubit.setTheme(currentTheme == ThemeMode.light
+                        ? ThemeMode.dark
+                        : ThemeMode.light);
+                  },
+                  icon: const Icon(Icons.brightness_6)),
+              IconButton(
                   onPressed: () => _openLocations(context),
                   icon: const Icon(Icons.list)),
             ],
@@ -53,34 +63,43 @@ class Homepage extends StatelessWidget {
           body: switch (state.status) {
             ForecastStatus.empty => _emptyWeather(context),
             ForecastStatus.loading => _loading(),
-            ForecastStatus.ok => _body(state.forecast),
+            ForecastStatus.ok => _body(context, state.forecast),
             ForecastStatus.error => state.forecast.empty
                 ? _emptyWeather(context)
-                : _body(state.forecast),
+                : _body(context, state.forecast),
           }),
     );
   }
 }
 
-Widget _body(Forecast forecast) => SingleChildScrollView(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: [
-          ForecastHero(forecast: forecast),
-          if (forecast.hourlyForecast != null)
-            TimelineCard(hourlyForecast: forecast.hourlyForecast!),
-          if (forecast.dailyForecast != null)
+Widget _body(BuildContext context, Forecast forecast) =>
+    RefreshIndicator.adaptive(
+      onRefresh: () => Future(() {
+        if (context.mounted) {
+          context.read<ForecastCubit>().fetchForecast(
+              context.read<SelectedLocationBloc>().state.selectedLocation!);
+        }
+      }),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            ForecastHero(forecast: forecast),
+            if (forecast.hourlyForecast != null)
+              TimelineCard(hourlyForecast: forecast.hourlyForecast!),
+            if (forecast.dailyForecast != null)
+              const SizedBox(
+                height: 10,
+              ),
+            if (forecast.dailyForecast != null)
+              WeekCard(dailyForecast: forecast.dailyForecast!),
             const SizedBox(
               height: 10,
             ),
-          if (forecast.dailyForecast != null)
-            WeekCard(dailyForecast: forecast.dailyForecast!),
-          const SizedBox(
-            height: 10,
-          ),
-          if (forecast.sunriseSunset != null)
-            SunriseSunsetCard(sunriseSunset: forecast.sunriseSunset!),
-        ],
+            if (forecast.sunriseSunset != null)
+              SunriseSunsetCard(sunriseSunset: forecast.sunriseSunset!),
+          ],
+        ),
       ),
     );
 

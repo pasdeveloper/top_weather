@@ -24,14 +24,12 @@ class SelectedLocationBloc
   @override
   SelectedLocationState? fromJson(Map<String, dynamic> json) {
     final state = SelectedLocationState.fromMap(json);
-    print('retrieved from storage: $state');
     return state;
   }
 
   @override
   Map<String, dynamic>? toJson(SelectedLocationState state) {
     final map = state.toMap();
-    print('writing to storage: $map');
     return map;
   }
 }
