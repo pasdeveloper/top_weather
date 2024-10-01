@@ -5,9 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
 import 'package:top_weather/bloc/theme/theme_cubit.dart';
-import 'package:top_weather/constants/app_images.dart';
-import 'package:top_weather/constants/assets.dart';
 import 'package:top_weather/constants/date_formatting.dart';
+import 'package:top_weather/constants/weather_icons.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/screens/locations.dart';
@@ -44,8 +43,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         children: [
           Positioned.fill(
             child: SvgPicture.asset(
-              // TODO: immagine dinamica
-              Assets.assetsImagesWeatherEveningClear1,
+              forecast.background,
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                   Colors.transparent.withOpacity(collapsePercentage),
@@ -53,7 +51,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             ),
           ),
           Container(
-            decoration: const BoxDecoration(color: Colors.black26),
+            decoration: const BoxDecoration(color: Colors.black38),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,9 +77,11 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   Widget _appBar(BuildContext context, double collapsePercentage) {
-    final textColor = collapsePercentage > .3
-        ? Theme.of(context).colorScheme.onPrimaryContainer
-        : Colors.white;
+    final textColor = ColorTween(
+            begin: Colors.white,
+            end: Theme.of(context).colorScheme.onPrimaryContainer)
+        .transform(collapsePercentage);
+
     return AppBar(
       backgroundColor: Colors.transparent,
       scrolledUnderElevation: 0,
@@ -117,7 +117,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   Widget _temperature(
       TextTheme textTheme, ColorScheme colorScheme, double collapsePercentage) {
     final textColor =
-        collapsePercentage > .3 ? colorScheme.onPrimaryContainer : Colors.white;
+        ColorTween(begin: Colors.white, end: colorScheme.onPrimaryContainer)
+            .transform(collapsePercentage);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(
@@ -141,7 +142,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             children: [
               if (forecast.icon != null)
                 SvgPicture.asset(
-                  AppImages.iconPathByName(forecast.icon!),
+                  WeatherIcons.iconPathByName(forecast.icon!),
                   height: max(50, (1 - collapsePercentage) * 120),
                 ),
               const SizedBox(

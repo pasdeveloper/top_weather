@@ -13,7 +13,6 @@ import 'package:top_weather/weather_sources/visual-crossing-weather/models/condi
 import 'package:top_weather/weather_sources/visual-crossing-weather/models/weather_data.dart';
 
 class VisualCrossingWeatherRepository implements WeatherRepository {
-  // TODO: capire locale delle varie location
   final _baseUrl = Uri.https(
     'weather.visualcrossing.com',
     'VisualCrossingWebServices/rest/services/timeline',
@@ -67,7 +66,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
     }
 
     if (response.statusCode == 429) {
-      // TODO: superato limite di richieste
+      throw 'Today\'s request limit reached';
     }
 
     if (response.statusCode != 200) {
@@ -87,26 +86,32 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
     final hours = _getNext24Hours(data);
     final days = _getNext7Days(data);
 
+    final now = data.currentConditions;
+
     return Forecast(
       currentLocation: data.resolvedAddress,
-      icon: data.currentConditions.icon,
-      description: data.currentConditions.conditions,
-      nowTemperature: data.currentConditions.temp,
+      icon: now.icon,
+      description: now.conditions,
+      nowTemperature: now.temp,
       todayMinTemperature: data.days[0].tempmin ?? 0,
       todayMaxTemperature: data.days[0].tempmax ?? 0,
-      feelsLikeTemperature: data.currentConditions.feelslike,
+      feelsLikeTemperature: now.feelslike,
       weatherSource: 'Visual Crossing Weather',
-      lastUpdated: _toDateTime(data.currentConditions.datetimeEpoch),
+      lastUpdated: _toDateTime(now.datetimeEpoch),
       sunriseSunset: sunriseSunset,
       hourlyForecast: HourlyForecast.withSunriseSunset(
         hours: hours,
         sunriseSunset: sunriseSunset,
       ),
       dailyForecast: DailyForecast(days: days),
-      windSpeed: data.currentConditions.windspeed,
-      windDirection: data.currentConditions.winddir,
-      pressure: data.currentConditions.pressure,
-      uvIndex: data.currentConditions.uvindex,
+      windSpeed: now.windspeed,
+      windDirection: now.winddir,
+      pressure: now.pressure,
+      uvIndex: now.uvindex,
+      snow: now.snow,
+      precipitationProbability: now.precipprob,
+      visibility: now.visibility,
+      cloudCoverPercentage: now.cloudcover,
     );
   }
 

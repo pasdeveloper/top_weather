@@ -19,7 +19,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<ForecastCubit>().state;
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    // final textTheme = Theme.of(context).textTheme;
     return BlocListener<SelectedLocationBloc, SelectedLocationState>(
       listener: (context, selectedLocationState) {
         if (selectedLocationState.selectedLocation != null) {
@@ -142,14 +142,5 @@ class Homepage extends StatelessWidget {
         ),
       ),
     );
-
-    // body: switch (state.status) {
-    //   ForecastStatus.empty => _emptyWeather(context),
-    //   ForecastStatus.loading => _loading(),
-    //   ForecastStatus.ok => _body(context, state.forecast),
-    //   ForecastStatus.error => state.forecast.empty
-    //       ? _emptyWeather(context)
-    //       : _body(context, state.forecast),
-    // },
   }
 }

@@ -44,7 +44,7 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
               ? const CircularProgressIndicator.adaptive()
               : IconButton.filled(
                   onPressed: _submitLocation,
-                  icon: const Icon(Icons.search),
+                  icon: const Icon(Icons.add_location_alt_outlined),
                 ),
         ],
       ),

@@ -1,3 +1,18 @@
+import 'dart:math';
+
+import 'package:top_weather/constants/assets.dart';
+
+final _random = Random();
+const _hotIfMoreThan = 30;
+const _coldIfLessThan = 5;
+const _isNightUntil = 4;
+const _isNightAfter = 21;
+const _snowIfMoreThan = 0;
+const _rainIfMoreThan = 30;
+const _windIfMoreThan = 5;
+const _fogIfLessThan = 2;
+const _cloudIfMoreThan = 30;
+
 class Forecast {
   final String currentLocation;
   final String? icon;
@@ -19,31 +34,43 @@ class Forecast {
   final double windDirection;
   final double pressure;
   final double uvIndex;
-
+  final double? snow;
+  final double? precipitationProbability;
+  final double? visibility;
+  final double? cloudCoverPercentage;
   bool _empty = false;
   bool get empty => _empty;
 
-  Forecast(
-      {required this.currentLocation,
-      this.icon,
-      required this.description,
-      required this.nowTemperature,
-      required this.todayMinTemperature,
-      required this.todayMaxTemperature,
-      required this.feelsLikeTemperature,
-      required this.weatherSource,
-      required this.lastUpdated,
-      this.sunriseSunset,
-      this.hourlyForecast,
-      this.dailyForecast,
-      required this.windSpeed,
-      required this.windDirection,
-      required this.pressure,
-      required this.uvIndex})
-      : nowTemperatureRound = nowTemperature.round(),
+  late String _background;
+  String get background => _background;
+
+  Forecast({
+    required this.currentLocation,
+    this.icon,
+    required this.description,
+    required this.nowTemperature,
+    required this.todayMinTemperature,
+    required this.todayMaxTemperature,
+    required this.feelsLikeTemperature,
+    required this.weatherSource,
+    required this.lastUpdated,
+    this.sunriseSunset,
+    this.hourlyForecast,
+    this.dailyForecast,
+    required this.windSpeed,
+    required this.windDirection,
+    required this.pressure,
+    required this.uvIndex,
+    required this.snow,
+    required this.precipitationProbability,
+    required this.visibility,
+    required this.cloudCoverPercentage,
+  })  : nowTemperatureRound = nowTemperature.round(),
         todayMinTemperatureRound = todayMinTemperature.round(),
         todayMaxTemperatureRound = todayMaxTemperature.round(),
-        feelsLikeTemperatureRound = feelsLikeTemperature.round();
+        feelsLikeTemperatureRound = feelsLikeTemperature.round() {
+    _setBackground();
+  }
 
   factory Forecast.empty() => Forecast(
         currentLocation: '',
@@ -58,7 +85,82 @@ class Forecast {
         windDirection: 0,
         pressure: 0,
         uvIndex: 0,
-      ).._empty = true;
+        snow: null,
+        precipitationProbability: null,
+        visibility: null,
+        cloudCoverPercentage: null,
+      )
+        .._empty = true
+        .._setBackground();
+
+  void _setBackground() => _background = _getAppropriateForecastBackground();
+
+  String _getAppropriateForecastBackground() {
+    if (empty) return Assets.weatherBackgroundDayCloudyHouseMorning;
+
+    bool isNight =
+        lastUpdated.hour > _isNightAfter || lastUpdated.hour < _isNightUntil;
+    bool isHot = nowTemperature > _hotIfMoreThan;
+    bool isCold = nowTemperature < _coldIfLessThan;
+
+    if (snow != null && snow! > _snowIfMoreThan) {
+      return isNight
+          ? Assets.weatherBackgroundNightSnowyMountainNight
+          : Assets.weatherBackgroundDaySnowyColdMountain;
+    }
+
+    if (precipitationProbability != null &&
+        precipitationProbability! > _rainIfMoreThan) {
+      return isNight
+          ? Assets.weatherBackgroundNightLightning
+          : _randomBetween([
+              Assets.weatherBackgroundDayRainyMountain,
+              Assets.weatherBackgroundDayRainyTrain
+            ]);
+    }
+
+    if (visibility != null && visibility! < _fogIfLessThan) {
+      return isNight
+          ? Assets.weatherBackgroundNightFoggyNight
+          : isHot
+              ? Assets.weatherBackgroundDayFoggyHotHills
+              : isCold
+                  ? Assets.weatherBackgroundDayFoggyHills
+                  : Assets.weatherBackgroundDayFoggySeaMorning;
+    }
+
+    if (cloudCoverPercentage != null &&
+        cloudCoverPercentage! > _cloudIfMoreThan) {
+      return isNight
+          ? Assets.weatherBackgroundNightCloudyHouseNight
+          : isCold
+              ? Assets.weatherBackgroundDayCloudyColdHills
+              : Assets.weatherBackgroundDayCloudyHouseMorning;
+    }
+
+    if (windSpeed > _windIfMoreThan) {
+      return isNight
+          ? Assets.weatherBackgroundNightWindyNight
+          : Assets.weatherBackgroundDayWindy;
+    }
+
+    return isNight
+        ? isHot
+            ? Assets.weatherBackgroundNightHotDesertNight
+            : Assets.weatherBackgroundNightClearStarsNight
+        : isHot
+            ? Assets.weatherBackgroundDayClearHotDesert
+            : _randomBetween([
+                Assets.weatherBackgroundDayClear,
+                Assets.weatherBackgroundDayClearRainbowMorning,
+                Assets.weatherBackgroundDayClearHills
+              ]);
+  }
+
+  String _randomBetween(List<String> options) {
+    final randomIndex = _random.nextInt(options.length);
+    return options[randomIndex];
+  }
 }
 
 class SunriseSunset {

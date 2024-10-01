@@ -2,96 +2,132 @@
 class Assets {
   Assets._();
   
-  /// Assets for assetsImagesWeatherDayRainy1
-  /// assets/images/Weather/Day/Rainy/1.svg
-  static const String assetsImagesWeatherDayRainy1 = "assets/images/Weather/Day/Rainy/1.svg";
+  /// Assets for weatherBackgroundDayClear
+  /// assets/weather/background/day/clear.svg
+  static const String weatherBackgroundDayClear = "assets/weather/background/day/clear.svg";
 
-  /// Assets for assetsImagesWeatherDayRainy2
-  /// assets/images/Weather/Day/Rainy/2.svg
-  static const String assetsImagesWeatherDayRainy2 = "assets/images/Weather/Day/Rainy/2.svg";
+  /// Assets for weatherBackgroundDayClearHills
+  /// assets/weather/background/day/clear_hills.svg
+  static const String weatherBackgroundDayClearHills = "assets/weather/background/day/clear_hills.svg";
 
-  /// Assets for assetsImagesWeatherDayRainy3
-  /// assets/images/Weather/Day/Rainy/3.svg
-  static const String assetsImagesWeatherDayRainy3 = "assets/images/Weather/Day/Rainy/3.svg";
+  /// Assets for weatherBackgroundDayClearHotDesert
+  /// assets/weather/background/day/clear_hot_desert.svg
+  static const String weatherBackgroundDayClearHotDesert = "assets/weather/background/day/clear_hot_desert.svg";
 
-  /// Assets for assetsImagesWeatherEveningClear1
-  /// assets/images/Weather/Evening/Clear/1.svg
-  static const String assetsImagesWeatherEveningClear1 = "assets/images/Weather/Evening/Clear/1.svg";
+  /// Assets for weatherBackgroundDayClearRainbowMorning
+  /// assets/weather/background/day/clear_rainbow_morning.svg
+  static const String weatherBackgroundDayClearRainbowMorning = "assets/weather/background/day/clear_rainbow_morning.svg";
 
-  /// Assets for assetsImagesWeatherEveningHot1
-  /// assets/images/Weather/Evening/Hot/1.svg
-  static const String assetsImagesWeatherEveningHot1 = "assets/images/Weather/Evening/Hot/1.svg";
+  /// Assets for weatherBackgroundDayCloudyColdHills
+  /// assets/weather/background/day/cloudy_cold_hills.svg
+  static const String weatherBackgroundDayCloudyColdHills = "assets/weather/background/day/cloudy_cold_hills.svg";
 
-  /// Assets for assetsImagesWeatherMorningBright
-  /// assets/images/Weather/Morning/Bright.svg
-  static const String assetsImagesWeatherMorningBright = "assets/images/Weather/Morning/Bright.svg";
+  /// Assets for weatherBackgroundDayCloudyHouseMorning
+  /// assets/weather/background/day/cloudy_house_morning.svg
+  static const String weatherBackgroundDayCloudyHouseMorning = "assets/weather/background/day/cloudy_house_morning.svg";
 
-  /// Assets for assetsImagesWeatherMorningClear1
-  /// assets/images/Weather/Morning/Clear/1.svg
-  static const String assetsImagesWeatherMorningClear1 = "assets/images/Weather/Morning/Clear/1.svg";
+  /// Assets for weatherBackgroundDayFoggyHills
+  /// assets/weather/background/day/foggy_hills.svg
+  static const String weatherBackgroundDayFoggyHills = "assets/weather/background/day/foggy_hills.svg";
 
-  /// Assets for assetsImagesWeatherMorningClear2
-  /// assets/images/Weather/Morning/Clear/2.svg
-  static const String assetsImagesWeatherMorningClear2 = "assets/images/Weather/Morning/Clear/2.svg";
+  /// Assets for weatherBackgroundDayFoggyHotHills
+  /// assets/weather/background/day/foggy_hot_hills.svg
+  static const String weatherBackgroundDayFoggyHotHills = "assets/weather/background/day/foggy_hot_hills.svg";
 
-  /// Assets for assetsImagesWeatherMorningCloudy
-  /// assets/images/Weather/Morning/Cloudy.svg
-  static const String assetsImagesWeatherMorningCloudy = "assets/images/Weather/Morning/Cloudy.svg";
+  /// Assets for weatherBackgroundDayFoggySeaMorning
+  /// assets/weather/background/day/foggy_sea_morning.svg
+  static const String weatherBackgroundDayFoggySeaMorning = "assets/weather/background/day/foggy_sea_morning.svg";
 
-  /// Assets for assetsImagesWeatherMorningColdCloudy2
-  /// assets/images/Weather/Morning/Cold/Cloudy/2.svg
-  static const String assetsImagesWeatherMorningColdCloudy2 = "assets/images/Weather/Morning/Cold/Cloudy/2.svg";
+  /// Assets for weatherBackgroundDayHazeMorning
+  /// assets/weather/background/day/haze_morning.svg
+  static const String weatherBackgroundDayHazeMorning = "assets/weather/background/day/haze_morning.svg";
 
-  /// Assets for assetsImagesWeatherMorningColdSnow1
-  /// assets/images/Weather/Morning/Cold/Snow/1.svg
-  static const String assetsImagesWeatherMorningColdSnow1 = "assets/images/Weather/Morning/Cold/Snow/1.svg";
+  /// Assets for weatherBackgroundDayRainyMountain
+  /// assets/weather/background/day/rainy_mountain.svg
+  static const String weatherBackgroundDayRainyMountain = "assets/weather/background/day/rainy_mountain.svg";
 
-  /// Assets for assetsImagesWeatherMorningFoggy1
-  /// assets/images/Weather/Morning/Foggy/1.svg
-  static const String assetsImagesWeatherMorningFoggy1 = "assets/images/Weather/Morning/Foggy/1.svg";
+  /// Assets for weatherBackgroundDayRainyTrain
+  /// assets/weather/background/day/rainy_train.svg
+  static const String weatherBackgroundDayRainyTrain = "assets/weather/background/day/rainy_train.svg";
 
-  /// Assets for assetsImagesWeatherMorningFoggy2
-  /// assets/images/Weather/Morning/Foggy/2.svg
-  static const String assetsImagesWeatherMorningFoggy2 = "assets/images/Weather/Morning/Foggy/2.svg";
+  /// Assets for weatherBackgroundDaySnowyColdMountain
+  /// assets/weather/background/day/snowy_cold_mountain.svg
+  static const String weatherBackgroundDaySnowyColdMountain = "assets/weather/background/day/snowy_cold_mountain.svg";
 
-  /// Assets for assetsImagesWeatherMorningHaze2
-  /// assets/images/Weather/Morning/Haze/2.svg
-  static const String assetsImagesWeatherMorningHaze2 = "assets/images/Weather/Morning/Haze/2.svg";
+  /// Assets for weatherBackgroundDayWindy
+  /// assets/weather/background/day/windy.svg
+  static const String weatherBackgroundDayWindy = "assets/weather/background/day/windy.svg";
 
-  /// Assets for assetsImagesWeatherMorningHot1
-  /// assets/images/Weather/Morning/Hot/1.svg
-  static const String assetsImagesWeatherMorningHot1 = "assets/images/Weather/Morning/Hot/1.svg";
+  /// Assets for weatherBackgroundNightClearStarsNight
+  /// assets/weather/background/night/clear_stars_night.svg
+  static const String weatherBackgroundNightClearStarsNight = "assets/weather/background/night/clear_stars_night.svg";
 
-  /// Assets for assetsImagesWeatherMorningWindy
-  /// assets/images/Weather/Morning/Windy.svg
-  static const String assetsImagesWeatherMorningWindy = "assets/images/Weather/Morning/Windy.svg";
+  /// Assets for weatherBackgroundNightCloudyHouseNight
+  /// assets/weather/background/night/cloudy_house_night.svg
+  static const String weatherBackgroundNightCloudyHouseNight = "assets/weather/background/night/cloudy_house_night.svg";
 
-  /// Assets for assetsImagesWeatherNightClear1
-  /// assets/images/Weather/Night/Clear/1.svg
-  static const String assetsImagesWeatherNightClear1 = "assets/images/Weather/Night/Clear/1.svg";
+  /// Assets for weatherBackgroundNightColdMountainNight
+  /// assets/weather/background/night/cold_mountain_night.svg
+  static const String weatherBackgroundNightColdMountainNight = "assets/weather/background/night/cold_mountain_night.svg";
 
-  /// Assets for assetsImagesWeatherNightCloudy
-  /// assets/images/Weather/Night/Cloudy.svg
-  static const String assetsImagesWeatherNightCloudy = "assets/images/Weather/Night/Cloudy.svg";
+  /// Assets for weatherBackgroundNightFoggyNight
+  /// assets/weather/background/night/foggy_night.svg
+  static const String weatherBackgroundNightFoggyNight = "assets/weather/background/night/foggy_night.svg";
 
-  /// Assets for assetsImagesWeatherNightColdClear1nightColdClear
-  /// assets/images/Weather/Night/Cold/Clear/1night-cold-clear.svg
-  static const String assetsImagesWeatherNightColdClear1nightColdClear = "assets/images/Weather/Night/Cold/Clear/1night-cold-clear.svg";
+  /// Assets for weatherBackgroundNightHotDesertNight
+  /// assets/weather/background/night/hot_desert_night.svg
+  static const String weatherBackgroundNightHotDesertNight = "assets/weather/background/night/hot_desert_night.svg";
 
-  /// Assets for assetsImagesWeatherNightColdSnow
-  /// assets/images/Weather/Night/Cold/Snow.svg
-  static const String assetsImagesWeatherNightColdSnow = "assets/images/Weather/Night/Cold/Snow.svg";
+  /// Assets for weatherBackgroundNightLightning
+  /// assets/weather/background/night/lightning.svg
+  static const String weatherBackgroundNightLightning = "assets/weather/background/night/lightning.svg";
 
-  /// Assets for assetsImagesWeatherNightFoggy
-  /// assets/images/Weather/Night/Foggy.svg
-  static const String assetsImagesWeatherNightFoggy = "assets/images/Weather/Night/Foggy.svg";
+  /// Assets for weatherBackgroundNightSnowyMountainNight
+  /// assets/weather/background/night/snowy_mountain_night.svg
+  static const String weatherBackgroundNightSnowyMountainNight = "assets/weather/background/night/snowy_mountain_night.svg";
 
-  /// Assets for assetsImagesWeatherNightHotClear2
-  /// assets/images/Weather/Night/Hot/Clear/2.svg
-  static const String assetsImagesWeatherNightHotClear2 = "assets/images/Weather/Night/Hot/Clear/2.svg";
+  /// Assets for weatherBackgroundNightWindyNight
+  /// assets/weather/background/night/windy_night.svg
+  static const String weatherBackgroundNightWindyNight = "assets/weather/background/night/windy_night.svg";
 
-  /// Assets for assetsImagesWeatherNightWindy
-  /// assets/images/Weather/Night/Windy.svg
-  static const String assetsImagesWeatherNightWindy = "assets/images/Weather/Night/Windy.svg";
+  /// Assets for weatherIconClearDay
+  /// assets/weather/icon/clear-day.svg
+  static const String weatherIconClearDay = "assets/weather/icon/clear-day.svg";
+
+  /// Assets for weatherIconClearNight
+  /// assets/weather/icon/clear-night.svg
+  static const String weatherIconClearNight = "assets/weather/icon/clear-night.svg";
+
+  /// Assets for weatherIconCloudy
+  /// assets/weather/icon/cloudy.svg
+  static const String weatherIconCloudy = "assets/weather/icon/cloudy.svg";
+
+  /// Assets for weatherIconPartlyCloudDay
+  /// assets/weather/icon/partly-cloud-day.svg
+  static const String weatherIconPartlyCloudDay = "assets/weather/icon/partly-cloud-day.svg";
+
+  /// Assets for weatherIconPartlyCloudNight
+  /// assets/weather/icon/partly-cloud-night.svg
+  static const String weatherIconPartlyCloudNight = "assets/weather/icon/partly-cloud-night.svg";
+
+  /// Assets for weatherIconRain
+  /// assets/weather/icon/rain.svg
+  static const String weatherIconRain = "assets/weather/icon/rain.svg";
+
+  /// Assets for weatherIconSnow
+  /// assets/weather/icon/snow.svg
+  static const String weatherIconSnow = "assets/weather/icon/snow.svg";
+
+  /// Assets for weatherIconSunrise
+  /// assets/weather/icon/sunrise.svg
+  static const String weatherIconSunrise = "assets/weather/icon/sunrise.svg";
+
+  /// Assets for weatherIconSunset
+  /// assets/weather/icon/sunset.svg
+  static const String weatherIconSunset = "assets/weather/icon/sunset.svg";
+
+  /// Assets for weatherIconWindy
+  /// assets/weather/icon/windy.svg
+  static const String weatherIconWindy = "assets/weather/icon/windy.svg";
 }
 

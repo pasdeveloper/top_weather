@@ -28,10 +28,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/
-    - assets/images/Weather/Evening/Clear/
+    - assets/weather/icon/
+    - assets/weather/background/day/
+    - assets/weather/background/night/
 
 flutter_assets:
-  assets_path: assets/images/Weather
+  assets_path:
+    - assets/weather/background
+    - assets/weather/icon
   output_path: lib/constants/
   filename: assets.dart
+  field_prefix:

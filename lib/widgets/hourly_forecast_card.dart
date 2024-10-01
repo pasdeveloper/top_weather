@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:top_weather/constants/app_images.dart';
 import 'package:top_weather/constants/date_formatting.dart';
+import 'package:top_weather/constants/weather_icons.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/widgets/card_icon.dart';
 
@@ -74,7 +74,7 @@ class HourlyForecastCard extends StatelessWidget {
               height: 8,
             ),
             SvgPicture.asset(
-              AppImages.iconPathByName(hourForecast.icon),
+              WeatherIcons.iconPathByName(hourForecast.icon),
               height: 30,
               width: 30,
             ),

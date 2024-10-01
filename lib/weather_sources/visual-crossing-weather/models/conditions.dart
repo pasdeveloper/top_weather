@@ -9,7 +9,7 @@ class Conditions extends Equatable {
   double feelslike;
   double humidity;
   double dew;
-  double precip;
+  double? precip;
   double? precipprob;
   double snow;
   double snowdepth;
