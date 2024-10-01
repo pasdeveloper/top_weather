@@ -78,6 +78,7 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
         context
             .read<SelectedLocationBloc>()
             .add(UpdateSelectedLocationEvent(toSelect: newLocation));
+        Navigator.pop(context);
       }
     });
   }
