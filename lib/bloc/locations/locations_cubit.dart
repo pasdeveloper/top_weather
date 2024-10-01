@@ -11,25 +11,26 @@ class LocationsCubit extends HydratedCubit<LocationsState> {
   final WeatherRepository _repository;
   LocationsCubit(this._repository) : super(LocationsState.initial());
 
-  void searchAndAddLocation(String locationName) async {
+  Future<Location?> searchAndAddLocation(String locationName) async {
     emit(state.copyWith(status: LocationsStatus.loading));
 
+    Location? newLocation;
     try {
-      final newLocation = await _repository.searchWeatherLocation(locationName);
+      newLocation = await _repository.searchWeatherLocation(locationName);
 
       if (newLocation == null) {
         emit(state.copyWith(
             status: LocationsStatus.error,
             error: 'Location $locationName not found.'));
-        return;
+        return null;
       }
 
       final locations = List.of(state.locations);
-      if (locations.any((location) => location.id == newLocation.id)) {
+      if (locations.any((location) => location.id == newLocation!.id)) {
         emit(state.copyWith(
             status: LocationsStatus.error,
             error: 'Location $locationName already added.'));
-        return;
+        return null;
       }
 
       locations.insert(0, newLocation);
@@ -37,11 +38,16 @@ class LocationsCubit extends HydratedCubit<LocationsState> {
     } catch (e) {
       emit(state.copyWith(status: LocationsStatus.error, error: e.toString()));
     }
+    return newLocation;
   }
 
   void removeLocation(Location toRemove) {
     final locations = List.of(state.locations)..remove(toRemove);
     emit(state.copyWith(locations: locations));
+  }
+
+  void errorDeliveredToUser() {
+    emit(state.copyWith(status: LocationsStatus.ok));
   }
 
   @override

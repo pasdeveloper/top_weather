@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:top_weather/bloc/locations/locations_cubit.dart';
+import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
 
 class AddLocationWidget extends StatefulWidget {
   const AddLocationWidget({super.key});
@@ -17,6 +18,7 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
   Widget build(BuildContext context) {
     final searchLoading =
         context.watch<LocationsCubit>().state.status == LocationsStatus.loading;
+    final colorScheme = Theme.of(context).colorScheme;
     return Form(
       key: _form,
       child: Row(
@@ -24,6 +26,7 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
         children: [
           Expanded(
             child: TextFormField(
+              style: TextStyle(color: colorScheme.onSurface),
               decoration: const InputDecoration(
                 labelText: 'Add location',
                 hintText: 'Rome, Italy...',
@@ -67,6 +70,15 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
   }
 
   void _searchLocation(String locationName) {
-    context.read<LocationsCubit>().searchAndAddLocation(locationName);
+    context
+        .read<LocationsCubit>()
+        .searchAndAddLocation(locationName)
+        .then((newLocation) {
+      if (newLocation != null && mounted) {
+        context
+            .read<SelectedLocationBloc>()
+            .add(UpdateSelectedLocationEvent(toSelect: newLocation));
+      }
+    });
   }
 }

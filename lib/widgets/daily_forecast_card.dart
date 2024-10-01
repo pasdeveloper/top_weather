@@ -29,7 +29,7 @@ class DailyForecastCard extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  'Day forecast',
+                  'Daily temperature',
                   style: textTheme.titleSmall!
                       .copyWith(color: colorScheme.onSurface),
                 )
@@ -139,7 +139,7 @@ LineChartData _getChartDataFromForecast(
             .map(
               (touchedSpot) => LineTooltipItem(
                 '${touchedSpot.y.toInt()}°',
-                textTheme.labelMedium!.copyWith(color: touchedSpot.bar.color),
+                textTheme.titleMedium!.copyWith(color: touchedSpot.bar.color),
               ),
             )
             .toList(),

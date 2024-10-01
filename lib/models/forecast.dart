@@ -10,27 +10,37 @@ class Forecast {
   final int todayMinTemperatureRound;
   final int todayMaxTemperatureRound;
   final int feelsLikeTemperatureRound;
+  final String weatherSource;
   final DateTime lastUpdated;
   final SunriseSunset? sunriseSunset;
   final HourlyForecast? hourlyForecast;
   final DailyForecast? dailyForecast;
+  final double windSpeed;
+  final double windDirection;
+  final double pressure;
+  final double uvIndex;
 
   bool _empty = false;
   bool get empty => _empty;
 
-  Forecast({
-    required this.currentLocation,
-    this.icon,
-    required this.description,
-    required this.nowTemperature,
-    required this.todayMinTemperature,
-    required this.todayMaxTemperature,
-    required this.feelsLikeTemperature,
-    required this.lastUpdated,
-    this.sunriseSunset,
-    this.hourlyForecast,
-    this.dailyForecast,
-  })  : nowTemperatureRound = nowTemperature.round(),
+  Forecast(
+      {required this.currentLocation,
+      this.icon,
+      required this.description,
+      required this.nowTemperature,
+      required this.todayMinTemperature,
+      required this.todayMaxTemperature,
+      required this.feelsLikeTemperature,
+      required this.weatherSource,
+      required this.lastUpdated,
+      this.sunriseSunset,
+      this.hourlyForecast,
+      this.dailyForecast,
+      required this.windSpeed,
+      required this.windDirection,
+      required this.pressure,
+      required this.uvIndex})
+      : nowTemperatureRound = nowTemperature.round(),
         todayMinTemperatureRound = todayMinTemperature.round(),
         todayMaxTemperatureRound = todayMaxTemperature.round(),
         feelsLikeTemperatureRound = feelsLikeTemperature.round();
@@ -42,7 +52,12 @@ class Forecast {
         todayMinTemperature: 0,
         todayMaxTemperature: 0,
         feelsLikeTemperature: 0,
+        weatherSource: '',
         lastUpdated: DateTime(2001, 7, 4),
+        windSpeed: 0,
+        windDirection: 0,
+        pressure: 0,
+        uvIndex: 0,
       ).._empty = true;
 }
 

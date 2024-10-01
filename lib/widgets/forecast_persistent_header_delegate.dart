@@ -59,20 +59,20 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _appBar(context, collapsePercentage),
-              _temperature(textTheme, colorScheme, collapsePercentage),
-              AnimatedCrossFade(
-                firstChild: _descriptions(textTheme),
-                secondChild: const SizedBox(
-                  height: 10,
-                ),
-                crossFadeState: collapsePercentage < .3
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 50),
-              ),
-              // _descriptions(textTheme),
+              if (!forecast.empty)
+                _temperature(textTheme, colorScheme, collapsePercentage),
+              SizedBox(
+                height: (1 - collapsePercentage) * 60,
+              )
             ],
           ),
+          if (!forecast.empty)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: _descriptions(textTheme, collapsePercentage),
+            ),
         ],
       ),
     );
@@ -158,7 +158,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _descriptions(TextTheme textTheme) {
+  Widget _descriptions(TextTheme textTheme, double collapsePercentage) {
+    final color = Colors.white.withOpacity(1 - collapsePercentage);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
       child: Row(
@@ -167,12 +168,12 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         children: [
           Text(
             dateFormatter.format(forecast.lastUpdated),
-            style: textTheme.bodyLarge!.copyWith(color: Colors.white),
+            style: textTheme.bodyLarge!.copyWith(color: color),
           ),
           Text(
             '▼ ${forecast.todayMinTemperature}°\n▲ ${forecast.todayMaxTemperature}°',
             style: textTheme.bodyLarge!
-                .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                .copyWith(color: color, fontWeight: FontWeight.bold),
           )
         ],
       ),

@@ -95,6 +95,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       todayMinTemperature: data.days[0].tempmin ?? 0,
       todayMaxTemperature: data.days[0].tempmax ?? 0,
       feelsLikeTemperature: data.currentConditions.feelslike,
+      weatherSource: 'Visual Crossing Weather',
       lastUpdated: _toDateTime(data.currentConditions.datetimeEpoch),
       sunriseSunset: sunriseSunset,
       hourlyForecast: HourlyForecast.withSunriseSunset(
@@ -102,6 +103,10 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
         sunriseSunset: sunriseSunset,
       ),
       dailyForecast: DailyForecast(days: days),
+      windSpeed: data.currentConditions.windspeed,
+      windDirection: data.currentConditions.winddir,
+      pressure: data.currentConditions.pressure,
+      uvIndex: data.currentConditions.uvindex,
     );
   }
 

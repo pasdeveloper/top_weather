@@ -16,10 +16,17 @@ class Locations extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) => AlertDialog.adaptive(
-              content: Text(state.error),
+              content: Text(
+                state.error,
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              ),
               actions: [
                 TextButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      context.read<LocationsCubit>().errorDeliveredToUser();
+                    },
                     child: const Text('Ok'))
               ],
             ),
