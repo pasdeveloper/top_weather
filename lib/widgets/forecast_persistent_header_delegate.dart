@@ -36,6 +36,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         color: colorScheme.primaryContainer,
         borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(33), bottomRight: Radius.circular(33)),
+        boxShadow: const [BoxShadow()],
       ),
       width: double.infinity,
       clipBehavior: Clip.hardEdge,
@@ -51,7 +52,10 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             ),
           ),
           Container(
-            decoration: const BoxDecoration(color: Colors.black38),
+            decoration: BoxDecoration(
+                color:
+                    ColorTween(begin: Colors.black38, end: Colors.transparent)
+                        .transform(collapsePercentage)),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
