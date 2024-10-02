@@ -8,10 +8,10 @@ const _coldIfLessThan = 5;
 const _isNightUntil = 4;
 const _isNightAfter = 21;
 const _snowIfMoreThan = 0;
-const _rainIfMoreThan = 30;
-const _windIfMoreThan = 5;
-const _fogIfLessThan = 2;
-const _cloudIfMoreThan = 30;
+const _rainIfMoreThan = 30; // % precipitation probability
+const _windIfMoreThan = 20; // km/h
+const _fogIfLessThan = 2; // km visibility
+const _cloudIfMoreThan = 50; // % cloud coverage
 
 class Forecast {
   final String currentLocation;
@@ -131,6 +131,12 @@ class Forecast {
                   : Assets.weatherBackgroundDayFoggySeaMorning;
     }
 
+    if (windSpeed > _windIfMoreThan) {
+      return isNight
+          ? Assets.weatherBackgroundNightWindyNight
+          : Assets.weatherBackgroundDayWindy;
+    }
+
     if (cloudCoverPercentage != null &&
         cloudCoverPercentage! > _cloudIfMoreThan) {
       return isNight
@@ -138,12 +144,6 @@ class Forecast {
           : isCold
               ? Assets.weatherBackgroundDayCloudyColdHills
               : Assets.weatherBackgroundDayCloudyHouseMorning;
-    }
-
-    if (windSpeed > _windIfMoreThan) {
-      return isNight
-          ? Assets.weatherBackgroundNightWindyNight
-          : Assets.weatherBackgroundDayWindy;
     }
 
     return isNight

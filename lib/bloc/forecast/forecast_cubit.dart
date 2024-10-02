@@ -10,10 +10,8 @@ class ForecastCubit extends Cubit<ForecastState> {
   final WeatherRepository _repository;
   ForecastCubit(this._repository) : super(ForecastState.initial());
 
-  void fetchForecast(Location location, {bool setLoading = true}) async {
-    if (setLoading) {
-      emit(state.copyWith(status: ForecastStatus.loading));
-    }
+  void fetchForecast(Location location) async {
+    emit(state.copyWith(status: ForecastStatus.loading));
 
     try {
       final forecast = await _repository.fetchWeatherForecast(location);
