@@ -72,7 +72,8 @@ class _HomepageState extends State<Homepage>
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverPersistentHeader(
                   delegate: ForecastPersistentHeaderDelegate(
-                      forecast: state.forecast),
+                    forecast: state.forecast,
+                  ),
                   pinned: true,
                 ),
               ),

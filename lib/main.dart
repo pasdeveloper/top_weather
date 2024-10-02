@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:top_weather/bloc/forecast/forecast_cubit.dart';
+import 'package:top_weather/bloc/header/header_cubit.dart';
 import 'package:top_weather/bloc/locations/locations_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
 import 'package:top_weather/bloc/theme/theme_cubit.dart';
@@ -36,6 +37,9 @@ void main() async {
       ),
       BlocProvider(
         create: (context) => ThemeCubit(),
+      ),
+      BlocProvider(
+        create: (context) => HeaderCubit(),
       ),
     ],
     child: BlocBuilder<ThemeCubit, ThemeState>(

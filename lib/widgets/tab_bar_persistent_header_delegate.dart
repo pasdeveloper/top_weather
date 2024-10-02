@@ -3,6 +3,7 @@ import 'package:top_weather/widgets/tab_buttons.dart';
 
 class TabBarPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final TabController tabController;
+
   TabBarPersistentHeaderDelegate({
     required this.tabController,
   });
@@ -10,7 +11,7 @@ class TabBarPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return TabButtons(tabController: tabController, collapsePercentage: 0);
+    return TabButtons(tabController: tabController);
   }
 
   @override

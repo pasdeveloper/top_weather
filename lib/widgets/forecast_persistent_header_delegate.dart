@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:top_weather/bloc/header/header_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
 import 'package:top_weather/bloc/theme/theme_cubit.dart';
 import 'package:top_weather/constants/date_formatting.dart';
@@ -31,6 +32,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     final colorScheme = Theme.of(context).colorScheme;
     final double collapsePercentage =
         min(shrinkOffset / (maxExtent - minExtent), 1);
+
+    context.read<HeaderCubit>().setCollapsed(collapsePercentage == 1);
 
     return Container(
       decoration: BoxDecoration(
