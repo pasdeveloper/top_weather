@@ -10,14 +10,11 @@ import 'package:top_weather/constants/weather_icons.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/screens/locations.dart';
-import 'package:top_weather/widgets/tab_buttons.dart';
 
 class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Forecast forecast;
-  final TabController tabController;
 
-  ForecastPersistentHeaderDelegate(
-      {required this.forecast, required this.tabController});
+  ForecastPersistentHeaderDelegate({required this.forecast});
 
   void _openLocations(BuildContext context) async {
     Navigator.push<Location>(
@@ -35,60 +32,51 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     final double collapsePercentage =
         min(shrinkOffset / (maxExtent - minExtent), 1);
 
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: colorScheme.primaryContainer,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(33 * (1 - collapsePercentage)),
-                  bottomRight: Radius.circular(33 * (1 - collapsePercentage))),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: SvgPicture.asset(
-                    forecast.background,
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.transparent.withOpacity(collapsePercentage),
-                        BlendMode.dstOut),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: ColorTween(
-                              begin: Colors.black38, end: Colors.transparent)
-                          .transform(collapsePercentage)),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _appBar(context, collapsePercentage),
-                    if (!forecast.empty)
-                      _temperature(textTheme, colorScheme, collapsePercentage),
-                    SizedBox(
-                      height: (1 - collapsePercentage) * 60,
-                    )
-                  ],
-                ),
-                if (!forecast.empty)
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    left: 0,
-                    child: _descriptions(textTheme, collapsePercentage),
-                  ),
-              ],
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer,
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(33 * (1 - collapsePercentage)),
+            bottomRight: Radius.circular(33 * (1 - collapsePercentage))),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: SvgPicture.asset(
+              forecast.background,
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.transparent.withOpacity(collapsePercentage),
+                  BlendMode.dstOut),
             ),
           ),
-        ),
-        TabButtons(
-            tabController: tabController,
-            collapsePercentage: collapsePercentage)
-      ],
+          Container(
+            decoration: BoxDecoration(
+                color:
+                    ColorTween(begin: Colors.black38, end: Colors.transparent)
+                        .transform(collapsePercentage)),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _appBar(context, collapsePercentage),
+              if (!forecast.empty)
+                _temperature(textTheme, colorScheme, collapsePercentage),
+              SizedBox(
+                height: (1 - collapsePercentage) * 60,
+              )
+            ],
+          ),
+          if (!forecast.empty)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: _descriptions(textTheme, collapsePercentage),
+            ),
+        ],
+      ),
     );
   }
 
@@ -198,10 +186,10 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 440;
+  double get maxExtent => 400;
 
   @override
-  double get minExtent => 260;
+  double get minExtent => 220;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
