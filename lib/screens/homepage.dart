@@ -12,8 +12,31 @@ import 'package:top_weather/widgets/uv_index_card.dart';
 import 'package:top_weather/widgets/wind_direction_card.dart';
 import 'package:top_weather/widgets/wind_speed_card.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({super.key});
+
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage>
+    with SingleTickerProviderStateMixin {
+  final double _gap = 8;
+
+  late TabController _tabController;
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,135 +48,140 @@ class Homepage extends StatelessWidget {
           context.read<SelectedLocationBloc>().state.selectedLocation;
       if (location == null) return;
 
-      return context
-          .read<ForecastCubit>()
-          .fetchForecast(location, setLoading: false);
+      return context.read<ForecastCubit>().fetchForecast(location);
     }
 
-    // final textTheme = Theme.of(context).textTheme;
     return BlocListener<SelectedLocationBloc, SelectedLocationState>(
       listener: (context, selectedLocationState) {
         if (selectedLocationState.selectedLocation != null) {
-          context
-              .read<ForecastCubit>()
-              .fetchForecast(selectedLocationState.selectedLocation!);
+          // context
+          //     .read<ForecastCubit>()
+          //     .fetchForecast(selectedLocationState.selectedLocation!);
+          _refreshIndicatorKey.currentState!.show();
         } else {
           context.read<ForecastCubit>().emptyForecast();
         }
       },
       child: Scaffold(
         body: RefreshIndicator.adaptive(
+          key: _refreshIndicatorKey,
           onRefresh: refresh,
-          child: CustomScrollView(
-            slivers: [
+          notificationPredicate: (notification) => notification.depth == 2,
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverPersistentHeader(
-                delegate:
-                    ForecastPersistentHeaderDelegate(forecast: state.forecast),
+                delegate: ForecastPersistentHeaderDelegate(
+                    forecast: state.forecast, tabController: _tabController),
                 pinned: true,
               ),
-              ...switch (state.status) {
-                ForecastStatus.empty => [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 60),
-                        child: Text(
-                          'Please select a location',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontStyle: FontStyle.italic,
-                            color: colorScheme.onSurface.withOpacity(.5),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                  ],
-                ForecastStatus.loading => [
-                    const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.all(60),
-                        child:
-                            Center(child: CircularProgressIndicator.adaptive()),
-                      ),
-                    )
-                  ],
-                ForecastStatus.ok => [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 12),
-                      sliver: SliverGrid.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 2.5,
-                        children: [
-                          WindSpeedCard(windSpeed: state.forecast.windSpeed),
-                          WindDirectionCard(
-                              windDirection: state.forecast.windDirection),
-                          PressureCard(pressure: state.forecast.pressure),
-                          UvIndexCard(uvIndex: state.forecast.uvIndex),
-                        ],
-                      ),
-                    ),
-                    if (state.forecast.hourlyForecast != null)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          child: HourlyForecastCard(
-                            hourlyForecast: state.forecast.hourlyForecast!,
-                          ),
-                        ),
-                      ),
-                    if (state.forecast.dailyForecast != null)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          child: DailyForecastCard(
-                              dailyForecast: state.forecast.dailyForecast!),
-                        ),
-                      ),
-                    if (state.forecast.hourlyForecast != null)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          child: RainChanceCard(
-                              hourlyForecast: state.forecast.hourlyForecast!),
-                        ),
-                      ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        child: SourceInformation(
-                          lastUpdated: state.forecast.lastUpdated,
-                          weatherSource: state.forecast.weatherSource,
-                        ),
-                      ),
-                    )
-                  ],
-                ForecastStatus.error => [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 60),
-                        child: Text(
-                          state.error,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontStyle: FontStyle.italic,
-                            color: colorScheme.error.withOpacity(.5),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                  ]
-              },
             ],
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                _todaycontent(state, colorScheme),
+                SingleChildScrollView(child: Text('Other tab'.toString())),
+                // const Text('Other tab'),
+              ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _todaycontent(ForecastState state, ColorScheme colorScheme) {
+    final status = state.status;
+
+    if (status == ForecastStatus.empty) {
+      return Center(
+        child: Text(
+          'Please select a location',
+          style: TextStyle(
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+            color: colorScheme.onSurface.withOpacity(.5),
+          ),
+          // textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    if (status == ForecastStatus.error) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 60),
+        child: Text(
+          state.error,
+          style: TextStyle(
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+            color: colorScheme.error.withOpacity(.5),
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
+            child: Row(
+              children: [
+                Expanded(
+                  child: WindSpeedCard(windSpeed: state.forecast.windSpeed),
+                ),
+                SizedBox(width: _gap),
+                Expanded(
+                    child: WindDirectionCard(
+                        windDirection: state.forecast.windDirection)),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
+            child: Row(
+              children: [
+                Expanded(
+                  child: PressureCard(pressure: state.forecast.pressure),
+                ),
+                SizedBox(width: _gap),
+                Expanded(
+                  child: UvIndexCard(uvIndex: state.forecast.uvIndex),
+                ),
+              ],
+            ),
+          ),
+          if (state.forecast.hourlyForecast != null)
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
+              child: HourlyForecastCard(
+                hourlyForecast: state.forecast.hourlyForecast!,
+              ),
+            ),
+          if (state.forecast.dailyForecast != null)
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
+              child: DailyForecastCard(
+                  dailyForecast: state.forecast.dailyForecast!),
+            ),
+          if (state.forecast.hourlyForecast != null)
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
+              child: RainChanceCard(
+                  hourlyForecast: state.forecast.hourlyForecast!),
+            ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
+            child: SourceInformation(
+              lastUpdated: state.forecast.lastUpdated,
+              weatherSource: state.forecast.weatherSource,
+            ),
+          )
+        ],
       ),
     );
   }

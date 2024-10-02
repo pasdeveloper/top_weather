@@ -3,40 +3,40 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Conditions extends Equatable {
-  String datetime;
-  int datetimeEpoch;
-  double temp;
-  double feelslike;
-  double humidity;
-  double dew;
-  double? precip;
-  double? precipprob;
-  double snow;
-  double snowdepth;
-  double windspeed;
-  double? windspeedmax;
-  double? windspeedmean;
-  double? windspeedmin;
-  double winddir;
-  double pressure;
-  double visibility;
-  double cloudcover;
-  double solarradiation; // W/m2
-  double solarenergy; // MJ/m2
-  double uvindex;
-  String conditions;
-  String icon;
-  int? sunriseEpoch;
-  int? sunsetEpoch;
-  double? moonphase;
-  int? moonriseEpoch;
-  int? moonsetEpoch;
-  double? tempmax;
-  double? tempmin;
-  double? feelslikemax;
-  double? feelslikemin;
-  String? description;
-  List<Conditions>? hours;
+  final String datetime;
+  final int datetimeEpoch;
+  final double temp;
+  final double feelslike;
+  final double humidity;
+  final double dew;
+  final double? precip;
+  final double? precipprob;
+  final double snow;
+  final double snowdepth;
+  final double windspeed;
+  final double? windspeedmax;
+  final double? windspeedmean;
+  final double? windspeedmin;
+  final double winddir;
+  final double pressure;
+  final double visibility;
+  final double cloudcover;
+  final double solarradiation; // W/m2
+  final double solarenergy; // MJ/m2
+  final double uvindex;
+  final String conditions;
+  final String icon;
+  final int? sunriseEpoch;
+  final int? sunsetEpoch;
+  final double? moonphase;
+  final int? moonriseEpoch;
+  final int? moonsetEpoch;
+  final double? tempmax;
+  final double? tempmin;
+  final double? feelslikemax;
+  final double? feelslikemin;
+  final String? description;
+  final List<Conditions>? hours;
 
   Moonphase? get moonphaseValue {
     if (moonphase == null) return null;
@@ -51,7 +51,7 @@ class Conditions extends Equatable {
     return null;
   }
 
-  Conditions({
+  const Conditions({
     required this.datetime,
     required this.datetimeEpoch,
     required this.temp,

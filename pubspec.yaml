@@ -38,4 +38,4 @@ flutter_assets:
     - assets/weather/icon
   output_path: lib/constants/
   filename: assets.dart
-  field_prefix:
+  field_prefix: null
