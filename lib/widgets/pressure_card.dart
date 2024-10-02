@@ -35,7 +35,7 @@ class PressureCard extends StatelessWidget {
                   ),
                   Text(
                     '$pressure hpa',
-                    style: textTheme.titleMedium!
+                    style: textTheme.bodyLarge!
                         .copyWith(color: colorScheme.onSurface),
                   )
                 ],

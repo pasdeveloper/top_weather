@@ -96,7 +96,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       title: Text(
         context.watch<SelectedLocationBloc>().state.selectedLocation?.name ??
             'Top Weather',
-        style: TextStyle(color: textColor),
+        style:
+            Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor),
       ),
       actions: [
         IconButton(
@@ -141,7 +142,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
               Text(
                 'Feels like ${forecast.feelsLikeTemperature}°',
-                style: textTheme.bodyLarge!.copyWith(color: textColor),
+                style: textTheme.titleMedium!.copyWith(color: textColor),
               ),
             ],
           ),
@@ -157,7 +158,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
               Text(
                 forecast.description,
-                style: textTheme.bodyLarge!.copyWith(color: textColor),
+                style: textTheme.titleMedium!.copyWith(color: textColor),
               ),
             ],
           ),
@@ -176,11 +177,11 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         children: [
           Text(
             dateFormatter.format(forecast.weatherDataDatetime),
-            style: textTheme.bodyLarge!.copyWith(color: color),
+            style: textTheme.titleMedium!.copyWith(color: color),
           ),
           Text(
             '▼ ${forecast.todayMinTemperature}°\n▲ ${forecast.todayMaxTemperature}°',
-            style: textTheme.bodyLarge!
+            style: textTheme.titleMedium!
                 .copyWith(color: color, fontWeight: FontWeight.bold),
           )
         ],

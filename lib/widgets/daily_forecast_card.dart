@@ -101,7 +101,7 @@ LineChartData _getChartDataFromForecast(
               SideTitleFitInsideData.fromTitleMeta(meta, distanceFromEdge: 0),
           child: Text(
             '${value.toInt()}°',
-            style: textTheme.titleSmall!
+            style: textTheme.labelMedium!
                 .copyWith(color: colorScheme.onPrimaryContainer),
           ),
         ),
@@ -122,7 +122,7 @@ LineChartData _getChartDataFromForecast(
                   distanceFromEdge: 0),
               child: Text(
                 shortDayNameFormatter.format(nextDate),
-                style: textTheme.titleSmall!
+                style: textTheme.labelMedium!
                     .copyWith(color: colorScheme.onPrimaryContainer),
               ),
             );
@@ -139,7 +139,7 @@ LineChartData _getChartDataFromForecast(
             .map(
               (touchedSpot) => LineTooltipItem(
                 '${touchedSpot.y.toInt()}°',
-                textTheme.titleMedium!.copyWith(color: touchedSpot.bar.color),
+                textTheme.bodyLarge!.copyWith(color: touchedSpot.bar.color),
               ),
             )
             .toList(),

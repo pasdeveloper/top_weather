@@ -37,7 +37,7 @@ class HourlyForecastCard extends StatelessWidget {
               ],
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -68,7 +68,7 @@ class HourlyForecastCard extends StatelessWidget {
                   ? hourForecast.description
                   : '${hourForecast.temperatureRound}°',
               style:
-                  textTheme.titleMedium!.copyWith(color: colorScheme.onSurface),
+                  textTheme.bodyLarge!.copyWith(color: colorScheme.onSurface),
             ),
             const SizedBox(
               height: 8,

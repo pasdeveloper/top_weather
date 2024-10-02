@@ -37,7 +37,7 @@ class WindDirectionCard extends StatelessWidget {
                 ),
                 Text(
                   _degreesToDirection(windDirection),
-                  style: textTheme.titleMedium!
+                  style: textTheme.bodyLarge!
                       .copyWith(color: colorScheme.onSurface),
                 )
               ],

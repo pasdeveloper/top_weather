@@ -34,7 +34,7 @@ class WindSpeedCard extends StatelessWidget {
                 ),
                 Text(
                   '$windSpeed km/h',
-                  style: textTheme.titleMedium!
+                  style: textTheme.bodyLarge!
                       .copyWith(color: colorScheme.onSurface),
                 )
               ],

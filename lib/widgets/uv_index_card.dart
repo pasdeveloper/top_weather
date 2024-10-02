@@ -35,7 +35,7 @@ class UvIndexCard extends StatelessWidget {
                 ),
                 Text(
                   '$uvIndex',
-                  style: textTheme.titleMedium!
+                  style: textTheme.bodyLarge!
                       .copyWith(color: colorScheme.onSurface),
                 )
               ],

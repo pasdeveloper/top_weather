@@ -41,7 +41,8 @@ class Locations extends StatelessWidget {
           body: Column(
             children: [
               const Padding(
-                  padding: EdgeInsets.all(12), child: AddLocationWidget()),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: AddLocationWidget()),
               Expanded(
                 child: state.locations.isEmpty
                     ? _emptyList(context)
@@ -68,7 +69,7 @@ Widget _emptyList(BuildContext context) => Center(
 Widget _locationsList(BuildContext context, List<Location> locations) =>
     ListView.builder(
       itemCount: locations.length,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       itemBuilder: (context, index) {
         final location = locations[index];
         final isSelected =

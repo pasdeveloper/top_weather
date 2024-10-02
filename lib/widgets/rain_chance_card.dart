@@ -67,7 +67,7 @@ class RainChanceCard extends StatelessWidget {
               timeFormatter.format(hourForecast.datetime),
               textAlign: TextAlign.end,
               style:
-                  textTheme.titleSmall!.copyWith(color: colorScheme.onSurface),
+                  textTheme.bodyMedium!.copyWith(color: colorScheme.onSurface),
             ),
           ),
           const SizedBox(
@@ -89,8 +89,12 @@ class RainChanceCard extends StatelessWidget {
           Text(
             '${hourForecast.precipitationProbability!}%',
             textAlign: TextAlign.end,
-            style: textTheme.titleSmall!.copyWith(color: colorScheme.onSurface),
+            style:
+                textTheme.labelMedium!.copyWith(color: colorScheme.onSurface),
           ),
+          const SizedBox(
+            width: 5,
+          )
         ],
       ),
     );

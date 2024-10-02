@@ -112,15 +112,13 @@ Widget _getBody(
   return TabBarView(
     controller: tabController,
     children: [
-      _wrapWithOverlapAbsorber(Column(
-        children: _getForecastElements(state),
-      )),
-      _wrapWithOverlapAbsorber(const Text('Other tab')),
+      _wrapWithOverlapAbsorber(widget: _todayForecastPage(state)),
+      _wrapWithOverlapAbsorber(widget: const Text('Other tab')),
     ],
   );
 }
 
-Builder _wrapWithOverlapAbsorber(Widget widget) {
+Builder _wrapWithOverlapAbsorber({required Widget widget}) {
   return Builder(
     builder: (context) => CustomScrollView(
       slivers: [
@@ -149,64 +147,68 @@ Widget _centerPageMessage(String text, Color color) {
   );
 }
 
-List<Widget> _getForecastElements(ForecastState state) => [
-      Padding(
-        padding:
-            const EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
-        child: Row(
-          children: [
-            Expanded(
-              child: WindSpeedCard(windSpeed: state.forecast.windSpeed),
-            ),
-            const SizedBox(width: _gap),
-            Expanded(
-                child: WindDirectionCard(
-                    windDirection: state.forecast.windDirection)),
-          ],
-        ),
-      ),
-      Padding(
-        padding:
-            const EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
-        child: Row(
-          children: [
-            Expanded(
-              child: PressureCard(pressure: state.forecast.pressure),
-            ),
-            const SizedBox(width: _gap),
-            Expanded(
-              child: UvIndexCard(uvIndex: state.forecast.uvIndex),
-            ),
-          ],
-        ),
-      ),
-      if (state.forecast.hourlyForecast != null)
+Widget _todayForecastPage(ForecastState state) => Column(
+      children: [
         Padding(
           padding:
               const EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
-          child: HourlyForecastCard(
-            hourlyForecast: state.forecast.hourlyForecast!,
+          child: Row(
+            children: [
+              Expanded(
+                child: WindSpeedCard(windSpeed: state.forecast.windSpeed),
+              ),
+              const SizedBox(width: _gap),
+              Expanded(
+                child: WindDirectionCard(
+                    windDirection: state.forecast.windDirection),
+              ),
+            ],
           ),
         ),
-      if (state.forecast.dailyForecast != null)
         Padding(
           padding:
               const EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
-          child:
-              DailyForecastCard(dailyForecast: state.forecast.dailyForecast!),
+          child: Row(
+            children: [
+              Expanded(
+                child: PressureCard(pressure: state.forecast.pressure),
+              ),
+              const SizedBox(width: _gap),
+              Expanded(
+                child: UvIndexCard(uvIndex: state.forecast.uvIndex),
+              ),
+            ],
+          ),
         ),
-      if (state.forecast.hourlyForecast != null)
+        if (state.forecast.hourlyForecast != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: _gap / 2, horizontal: _gap),
+            child: HourlyForecastCard(
+              hourlyForecast: state.forecast.hourlyForecast!,
+            ),
+          ),
+        if (state.forecast.dailyForecast != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: _gap / 2, horizontal: _gap),
+            child:
+                DailyForecastCard(dailyForecast: state.forecast.dailyForecast!),
+          ),
+        if (state.forecast.hourlyForecast != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: _gap / 2, horizontal: _gap),
+            child:
+                RainChanceCard(hourlyForecast: state.forecast.hourlyForecast!),
+          ),
         Padding(
           padding:
               const EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
-          child: RainChanceCard(hourlyForecast: state.forecast.hourlyForecast!),
+          child: SourceInformation(
+            lastUpdated: state.forecast.createdAt,
+            weatherSource: state.forecast.weatherSource,
+          ),
         ),
-      Padding(
-        padding:
-            const EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
-        child: SourceInformation(
-          lastUpdated: state.forecast.createdAt,
-          weatherSource: state.forecast.weatherSource,
-        ),
-      ),
-    ];
+      ],
+    );
