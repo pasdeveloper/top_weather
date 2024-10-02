@@ -184,7 +184,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            dateFormatter.format(forecast.lastUpdated),
+            dateFormatter.format(forecast.weatherDataDatetime),
             style: textTheme.bodyLarge!.copyWith(color: color),
           ),
           Text(

@@ -16,7 +16,7 @@ class SourceInformation extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Text(
-      'Last updated at ${timeFormatter.format(lastUpdated)} from $weatherSource',
+      'Last updated at ${fullTimeFormatter.format(lastUpdated)} from $weatherSource',
       style: textTheme.labelSmall!.copyWith(color: colorScheme.onSurface),
       textAlign: TextAlign.center,
     );

@@ -97,7 +97,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       todayMaxTemperature: data.days[0].tempmax ?? 0,
       feelsLikeTemperature: now.feelslike,
       weatherSource: 'Visual Crossing Weather',
-      lastUpdated: _toDateTime(now.datetimeEpoch),
+      weatherDataDatetime: _toDateTime(now.datetimeEpoch),
       sunriseSunset: sunriseSunset,
       hourlyForecast: HourlyForecast.withSunriseSunset(
         hours: hours,

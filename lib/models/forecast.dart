@@ -26,7 +26,8 @@ class Forecast {
   final int todayMaxTemperatureRound;
   final int feelsLikeTemperatureRound;
   final String weatherSource;
-  final DateTime lastUpdated;
+  final DateTime weatherDataDatetime;
+  final DateTime createdAt;
   final SunriseSunset? sunriseSunset;
   final HourlyForecast? hourlyForecast;
   final DailyForecast? dailyForecast;
@@ -53,7 +54,7 @@ class Forecast {
     required this.todayMaxTemperature,
     required this.feelsLikeTemperature,
     required this.weatherSource,
-    required this.lastUpdated,
+    required this.weatherDataDatetime, // datetime in requested location zone
     this.sunriseSunset,
     this.hourlyForecast,
     this.dailyForecast,
@@ -68,7 +69,8 @@ class Forecast {
   })  : nowTemperatureRound = nowTemperature.round(),
         todayMinTemperatureRound = todayMinTemperature.round(),
         todayMaxTemperatureRound = todayMaxTemperature.round(),
-        feelsLikeTemperatureRound = feelsLikeTemperature.round() {
+        feelsLikeTemperatureRound = feelsLikeTemperature.round(),
+        createdAt = DateTime.now() {
     _setBackground();
   }
 
@@ -80,7 +82,7 @@ class Forecast {
         todayMaxTemperature: 0,
         feelsLikeTemperature: 0,
         weatherSource: '',
-        lastUpdated: DateTime(2001, 7, 4),
+        weatherDataDatetime: DateTime(2001, 7, 4),
         windSpeed: 0,
         windDirection: 0,
         pressure: 0,
@@ -98,8 +100,8 @@ class Forecast {
   String _getAppropriateForecastBackground() {
     if (empty) return Assets.weatherBackgroundDayCloudyHouseMorning;
 
-    bool isNight =
-        lastUpdated.hour > _isNightAfter || lastUpdated.hour < _isNightUntil;
+    bool isNight = weatherDataDatetime.hour > _isNightAfter ||
+        weatherDataDatetime.hour < _isNightUntil;
     bool isHot = nowTemperature > _hotIfMoreThan;
     bool isCold = nowTemperature < _coldIfLessThan;
 

@@ -43,29 +43,26 @@ class _HomepageState extends State<Homepage>
     final state = context.watch<ForecastCubit>().state;
     final colorScheme = Theme.of(context).colorScheme;
 
-    Future<void> refresh() async {
-      final location =
+    Future<void> refreshForecast() async {
+      final selectedLocation =
           context.read<SelectedLocationBloc>().state.selectedLocation;
-      if (location == null) return;
-
-      return context.read<ForecastCubit>().fetchForecast(location);
+      if (selectedLocation != null) {
+        return context.read<ForecastCubit>().fetchForecast(selectedLocation);
+      } else {
+        context.read<ForecastCubit>().emptyForecast();
+        return;
+      }
     }
 
     return BlocListener<SelectedLocationBloc, SelectedLocationState>(
       listener: (context, selectedLocationState) {
-        if (selectedLocationState.selectedLocation != null) {
-          // context
-          //     .read<ForecastCubit>()
-          //     .fetchForecast(selectedLocationState.selectedLocation!);
-          _refreshIndicatorKey.currentState!.show();
-        } else {
-          context.read<ForecastCubit>().emptyForecast();
-        }
+        // chiama refreshForecast() attraverso RefreshIndicator
+        _refreshIndicatorKey.currentState!.show();
       },
       child: Scaffold(
         body: RefreshIndicator.adaptive(
           key: _refreshIndicatorKey,
-          onRefresh: refresh,
+          onRefresh: refreshForecast,
           notificationPredicate: (notification) => notification.depth == 2,
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -78,8 +75,8 @@ class _HomepageState extends State<Homepage>
             body: TabBarView(
               controller: _tabController,
               children: [
-                _todaycontent(state, colorScheme),
-                SingleChildScrollView(child: Text('Other tab'.toString())),
+                _todaycontent(state, colorScheme, _tabController),
+                const SingleChildScrollView(child: Text('Other tab')),
                 // const Text('Other tab'),
               ],
             ),
@@ -89,7 +86,8 @@ class _HomepageState extends State<Homepage>
     );
   }
 
-  Widget _todaycontent(ForecastState state, ColorScheme colorScheme) {
+  Widget _todaycontent(ForecastState state, ColorScheme colorScheme,
+      TabController tabController) {
     final status = state.status;
 
     if (status == ForecastStatus.empty) {
@@ -117,6 +115,20 @@ class _HomepageState extends State<Homepage>
             color: colorScheme.error.withOpacity(.5),
           ),
           textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    if (status == ForecastStatus.loading && state.forecast.empty) {
+      return Center(
+        child: Text(
+          'Loading forecast...',
+          style: TextStyle(
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+            color: colorScheme.onSurface.withOpacity(.5),
+          ),
+          // textAlign: TextAlign.center,
         ),
       );
     }
@@ -177,7 +189,7 @@ class _HomepageState extends State<Homepage>
           Padding(
             padding: EdgeInsets.symmetric(vertical: _gap / 2, horizontal: _gap),
             child: SourceInformation(
-              lastUpdated: state.forecast.lastUpdated,
+              lastUpdated: state.forecast.createdAt,
               weatherSource: state.forecast.weatherSource,
             ),
           )
