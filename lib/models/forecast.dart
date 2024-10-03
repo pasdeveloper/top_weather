@@ -262,15 +262,19 @@ class DayForecast {
   final double maxTemperature;
   final int minTemperatureRound;
   final int maxTemperatureRound;
+  final String description;
   final String icon;
   final int? precipitationProbability;
+  final HourlyForecast? hourlyForecast;
 
   DayForecast({
     required this.datetime,
     required this.minTemperature,
     required this.maxTemperature,
     required this.icon,
+    required this.description,
     this.precipitationProbability,
+    this.hourlyForecast,
   })  : minTemperatureRound = minTemperature.round(),
         maxTemperatureRound = maxTemperature.round();
 }

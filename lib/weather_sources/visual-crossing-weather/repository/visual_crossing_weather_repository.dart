@@ -74,6 +74,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
           message: httpErrorToMessage(response),
           reason: DataFetchExceptionReason.other);
     }
+
     final decodedJson = json.decode(response.body);
 
     final data = WeatherData.fromMap(decodedJson);
@@ -152,29 +153,39 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
         .sublist(
             max(currentHour, 0), min(todayAndTomorrow.length, currentHour + 24))
         .map(
-          (hourData) => HourForecast(
-            datetime: _toDateTime(hourData.datetimeEpoch),
-            temperature: hourData.temp,
-            icon: hourData.icon,
-            description: hourData.conditions,
-            precipitationProbability: hourData.precipprob?.round(),
-          ),
+          (hourData) => _toHourForecast(hourData),
         )
         .toList();
   }
 
+  HourForecast _toHourForecast(Conditions conditions) => HourForecast(
+        datetime: _toDateTime(conditions.datetimeEpoch),
+        temperature: conditions.temp,
+        icon: conditions.icon,
+        description: conditions.conditions,
+        precipitationProbability: conditions.precipprob?.round(),
+      );
+
   List<DayForecast> _getNext7Days(WeatherData data) {
-    return data.days
-        .sublist(0, min(data.days.length, 7))
-        .map(
-          (dayData) => DayForecast(
-            datetime: _toDateTime(dayData.datetimeEpoch),
-            minTemperature: dayData.tempmin!,
-            maxTemperature: dayData.tempmax!,
-            icon: dayData.icon,
-            precipitationProbability: dayData.precipprob?.round(),
-          ),
-        )
-        .toList();
+    return data.days.sublist(0, min(data.days.length, 7)).map(
+      (dayData) {
+        final hourlyForecast = dayData.hours == null
+            ? null
+            : HourlyForecast(
+                hours: dayData.hours!
+                    .map((hourData) => _toHourForecast(hourData))
+                    .toList(),
+              );
+        return DayForecast(
+          datetime: _toDateTime(dayData.datetimeEpoch),
+          minTemperature: dayData.tempmin!,
+          maxTemperature: dayData.tempmax!,
+          icon: dayData.icon,
+          description: dayData.conditions,
+          precipitationProbability: dayData.precipprob?.round(),
+          hourlyForecast: hourlyForecast,
+        );
+      },
+    ).toList();
   }
 }

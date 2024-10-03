@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:top_weather/constants/date_formatting.dart';
 import 'package:top_weather/models/forecast.dart';
-import 'package:top_weather/widgets/card_icon.dart';
 
-class RainChanceCard extends StatelessWidget {
-  const RainChanceCard({
+class RainChanceScrollableColumn extends StatelessWidget {
+  const RainChanceScrollableColumn({
     super.key,
     required this.hourlyForecast,
   });
@@ -15,41 +14,13 @@ class RainChanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    return Card(
-      color: colorScheme.secondaryContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                cardIconFrom(Icons.thunderstorm, colorScheme),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Chance of rain',
-                  style: textTheme.titleSmall!
-                      .copyWith(color: colorScheme.onSurface),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            AspectRatio(
-                aspectRatio: 2,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: hourlyForecast.hours
-                        .where((hourForecast) => !hourForecast.sunriseSunset)
-                        .map((hourForecast) => _rainChanceTile(
-                            colorScheme, textTheme, hourForecast))
-                        .toList(),
-                  ),
-                )),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: hourlyForecast.hours
+            .where((hourForecast) => !hourForecast.sunriseSunset)
+            .map((hourForecast) =>
+                _rainChanceTile(colorScheme, textTheme, hourForecast))
+            .toList(),
       ),
     );
   }
@@ -57,7 +28,7 @@ class RainChanceCard extends StatelessWidget {
   Widget _rainChanceTile(
       ColorScheme colorScheme, TextTheme textTheme, HourForecast hourForecast) {
     return SizedBox(
-      height: 40,
+      height: 35,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -77,7 +48,7 @@ class RainChanceCard extends StatelessWidget {
             flex: 5,
             child: LinearProgressIndicator(
               borderRadius: BorderRadius.circular(50),
-              minHeight: 25,
+              minHeight: 22,
               color: colorScheme.primary,
               backgroundColor: colorScheme.surface,
               value: hourForecast.precipitationProbability! / 100,

@@ -29,7 +29,7 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
               style: TextStyle(color: colorScheme.onSurface),
               decoration: const InputDecoration(
                 labelText: 'Add location',
-                hintText: 'Rome, Italy...',
+                // hintText: 'Rome, Italy...',
               ),
               textInputAction: TextInputAction.search,
               validator: _locationNameValidator,
