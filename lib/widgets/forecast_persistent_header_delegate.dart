@@ -7,10 +7,10 @@ import 'package:top_weather/bloc/header/header_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
 import 'package:top_weather/bloc/theme/theme_cubit.dart';
 import 'package:top_weather/constants/date_formatting.dart';
-import 'package:top_weather/constants/weather_icons.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/screens/locations.dart';
+import 'package:top_weather/widgets/forecast_icon.dart';
 
 class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Forecast forecast;
@@ -147,12 +147,12 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (forecast.icon != null)
-                SvgPicture.asset(
-                  WeatherIcons.iconPathByName(forecast.icon!),
-                  height: max(50, (1 - collapsePercentage) * 120),
-                ),
+              ForecastIconWidget(
+                icon: forecast.icon,
+                width: max(50, (1 - collapsePercentage) * 120),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -190,10 +190,10 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 400;
+  double get maxExtent => 380;
 
   @override
-  double get minExtent => 220;
+  double get minExtent => 200;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

@@ -5,7 +5,7 @@ import 'package:top_weather/constants/assets.dart';
 final _random = Random();
 const _hotIfMoreThan = 30;
 const _coldIfLessThan = 5;
-const _isNightUntil = 4;
+const _isNightUntil = 5;
 const _isNightAfter = 21;
 const _snowIfMoreThan = 0;
 const _rainIfMoreThan = 30; // % precipitation probability
@@ -15,7 +15,7 @@ const _cloudIfMoreThan = 50; // % cloud coverage
 
 class Forecast {
   final String currentLocation;
-  final String? icon;
+  final ForecastIcon icon;
   final String description;
   final double nowTemperature;
   final double todayMinTemperature;
@@ -28,7 +28,6 @@ class Forecast {
   final String weatherSource;
   final DateTime weatherDataDatetime;
   final DateTime createdAt;
-  final SunriseSunset? sunriseSunset;
   final HourlyForecast? hourlyForecast;
   final DailyForecast? dailyForecast;
   final double windSpeed;
@@ -39,6 +38,8 @@ class Forecast {
   final double? precipitationProbability;
   final double? visibility;
   final double? cloudCoverPercentage;
+  final DateTime? sunrise;
+  final DateTime? sunset;
   bool _empty = false;
   bool get empty => _empty;
 
@@ -47,7 +48,7 @@ class Forecast {
 
   Forecast({
     required this.currentLocation,
-    this.icon,
+    required this.icon,
     required this.description,
     required this.nowTemperature,
     required this.todayMinTemperature,
@@ -55,7 +56,6 @@ class Forecast {
     required this.feelsLikeTemperature,
     required this.weatherSource,
     required this.weatherDataDatetime, // datetime in requested location zone
-    this.sunriseSunset,
     this.hourlyForecast,
     this.dailyForecast,
     required this.windSpeed,
@@ -66,6 +66,8 @@ class Forecast {
     required this.precipitationProbability,
     required this.visibility,
     required this.cloudCoverPercentage,
+    this.sunrise,
+    this.sunset,
   })  : nowTemperatureRound = nowTemperature.round(),
         todayMinTemperatureRound = todayMinTemperature.round(),
         todayMaxTemperatureRound = todayMaxTemperature.round(),
@@ -76,12 +78,15 @@ class Forecast {
 
   factory Forecast.empty() => Forecast(
         currentLocation: '',
+        icon: ForecastIcon.notAvailable,
         description: '',
         nowTemperature: 0,
         todayMinTemperature: 0,
         todayMaxTemperature: 0,
         feelsLikeTemperature: 0,
         weatherSource: '',
+        sunrise: DateTime(2001, 7, 4),
+        sunset: DateTime(2001, 7, 4),
         weatherDataDatetime: DateTime(2001, 7, 4),
         windSpeed: 0,
         windDirection: 0,
@@ -100,7 +105,7 @@ class Forecast {
   String _getAppropriateForecastBackground() {
     if (empty) return Assets.weatherBackgroundDayCloudyHouseMorning;
 
-    bool isNight = weatherDataDatetime.hour > _isNightAfter ||
+    bool isNight = weatherDataDatetime.hour >= _isNightAfter ||
         weatherDataDatetime.hour < _isNightUntil;
     bool isHot = nowTemperature > _hotIfMoreThan;
     bool isCold = nowTemperature < _coldIfLessThan;
@@ -163,15 +168,11 @@ class Forecast {
     final randomIndex = _random.nextInt(options.length);
     return options[randomIndex];
   }
-}
 
-class SunriseSunset {
-  final DateTime? sunrise;
-  final DateTime? sunset;
-  SunriseSunset({
-    this.sunrise,
-    this.sunset,
-  });
+  @override
+  String toString() {
+    return 'Forecast(currentLocation: $currentLocation, icon: $icon, description: $description, nowTemperature: $nowTemperature, todayMinTemperature: $todayMinTemperature, todayMaxTemperature: $todayMaxTemperature, feelsLikeTemperature: $feelsLikeTemperature, nowTemperatureRound: $nowTemperatureRound, todayMinTemperatureRound: $todayMinTemperatureRound, todayMaxTemperatureRound: $todayMaxTemperatureRound, feelsLikeTemperatureRound: $feelsLikeTemperatureRound, weatherSource: $weatherSource, weatherDataDatetime: $weatherDataDatetime, createdAt: $createdAt, hourlyForecast: $hourlyForecast, dailyForecast: $dailyForecast, windSpeed: $windSpeed, windDirection: $windDirection, pressure: $pressure, uvIndex: $uvIndex, snow: $snow, precipitationProbability: $precipitationProbability, visibility: $visibility, cloudCoverPercentage: $cloudCoverPercentage, sunrise: $sunrise, sunset: $sunset, _empty: $_empty, _background: $_background)';
+  }
 }
 
 class HourlyForecast {
@@ -180,49 +181,15 @@ class HourlyForecast {
   HourlyForecast({
     required this.hours,
   });
-
-  factory HourlyForecast.withSunriseSunset({
-    required List<HourForecast> hours,
-    required SunriseSunset sunriseSunset,
-  }) {
-    final hours_ = List.of(hours);
-
-    if (sunriseSunset.sunrise != null) {
-      final sunriseIndex = hours_.indexWhere(
-        (hour) => sunriseSunset.sunrise!.isBefore(hour.datetime),
-      );
-      if (sunriseIndex >= 0) {
-        hours_.insert(sunriseIndex,
-            HourForecast.sunrise(datetime: sunriseSunset.sunrise));
-      } else {
-        hours_.add(HourForecast.sunrise(datetime: sunriseSunset.sunrise));
-      }
-    }
-    if (sunriseSunset.sunset != null) {
-      final sunsetIndex = hours_.indexWhere(
-        (hour) => sunriseSunset.sunset!.isBefore(hour.datetime),
-      );
-      if (sunsetIndex >= 0) {
-        hours_.insert(
-            sunsetIndex, HourForecast.sunset(datetime: sunriseSunset.sunset));
-      } else {
-        hours_.add(HourForecast.sunset(datetime: sunriseSunset.sunset));
-      }
-    }
-    return HourlyForecast(hours: hours_);
-  }
 }
 
 class HourForecast {
   final DateTime datetime;
-  final double? temperature;
-  final int? temperatureRound;
-  final String icon;
+  final double temperature;
+  final int temperatureRound;
+  final ForecastIcon icon;
   final String description;
   final int? precipitationProbability;
-
-  bool _sunriseSunset;
-  bool get sunriseSunset => _sunriseSunset;
 
   HourForecast({
     required this.datetime,
@@ -230,22 +197,7 @@ class HourForecast {
     required this.icon,
     required this.description,
     this.precipitationProbability,
-  })  : temperatureRound = temperature?.round(),
-        _sunriseSunset = false;
-
-  factory HourForecast.sunrise({required datetime}) => HourForecast(
-        datetime: datetime,
-        temperature: null,
-        icon: 'sunrise',
-        description: 'Sunrise',
-      ).._sunriseSunset = true;
-
-  factory HourForecast.sunset({required datetime}) => HourForecast(
-        datetime: datetime,
-        temperature: null,
-        icon: 'sunset',
-        description: 'Sunset',
-      ).._sunriseSunset = true;
+  }) : temperatureRound = temperature.round();
 }
 
 class DailyForecast {
@@ -263,7 +215,7 @@ class DayForecast {
   final int minTemperatureRound;
   final int maxTemperatureRound;
   final String description;
-  final String icon;
+  final ForecastIcon icon;
   final int? precipitationProbability;
   final HourlyForecast? hourlyForecast;
 
@@ -277,4 +229,50 @@ class DayForecast {
     this.hourlyForecast,
   })  : minTemperatureRound = minTemperature.round(),
         maxTemperatureRound = maxTemperature.round();
+}
+
+// enum
+enum ForecastIcon {
+  blizzard,
+  blowingSnow,
+  clearNight,
+  clearDay,
+  cloudy,
+  cloudyWithRain,
+  cloudyWithSnow,
+  cloudyWithSunny,
+  drizzle,
+  flurries,
+  hazeFogDustSmoke,
+  heavyRain,
+  heavySnow,
+  icy,
+  isolatedScatteredThunderstormsDay,
+  isolatedScatteredThunderstormsNight,
+  isolatedThunderstorms,
+  mixedRainSnow,
+  mixedRainSleetHail,
+  mostlyClearDay,
+  mostlyClearNight,
+  mostlyCloudyDay,
+  mostlyCloudyNight,
+  notAvailable,
+  partlyCloudyDay,
+  partlyCloudyNight,
+  scatteredShowersDay,
+  scatteredShowersNight,
+  scatteredSnowShowersDay,
+  scatteredSnowShowersNight,
+  showersRain,
+  showersSnow,
+  sleetHail,
+  strongThunderstorms,
+  sunnyAndCloudy,
+  sunnyWithRainDarkSky,
+  sunnyWithSnow,
+  tornado,
+  tropicalStormHurricane,
+  veryCold,
+  veryHot,
+  windyBreezy
 }

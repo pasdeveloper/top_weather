@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/constants/date_formatting.dart';
-import 'package:top_weather/constants/weather_icons.dart';
 import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/widgets/forecast_icon.dart';
 import 'package:top_weather/widgets/hourly_forecast_scrollable_row.dart';
 
 class DayForecastExpandableCard extends StatefulWidget {
@@ -29,45 +28,41 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       color: colorScheme.secondaryContainer,
       clipBehavior: Clip.hardEdge,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        child: Column(
-          children: [
-            InkWell(
-              onTap: widget.dayForecast.hourlyForecast != null
-                  ? () => setState(() => _expanded = !_expanded)
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: _daySummary(textTheme, colorScheme),
-              ),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: widget.dayForecast.hourlyForecast != null
+                ? () => setState(() => _expanded = !_expanded)
+                : null,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: _daySummary(textTheme, colorScheme),
             ),
-            if (widget.dayForecast.hourlyForecast != null)
-              AnimatedCrossFade(
-                  firstChild: const SizedBox.shrink(),
-                  secondChild: Column(
-                    children: [
-                      Divider(
-                        height: 1,
-                        thickness: 0,
-                        indent: 15,
-                        endIndent: 15,
-                        color: colorScheme.onSecondaryContainer.withOpacity(.5),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: HourlyForecastScrollableRow(
-                            hourlyForecast: widget.dayForecast.hourlyForecast!),
-                      ),
-                    ],
-                  ),
-                  crossFadeState: _expanded
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  duration: const Duration(milliseconds: 200))
-          ],
-        ),
+          ),
+          if (widget.dayForecast.hourlyForecast != null)
+            AnimatedCrossFade(
+                firstChild: const SizedBox.shrink(),
+                secondChild: Column(
+                  children: [
+                    Divider(
+                      height: 1,
+                      thickness: 0,
+                      indent: 15,
+                      endIndent: 15,
+                      color: colorScheme.onSecondaryContainer.withOpacity(.5),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: HourlyForecastScrollableRow(
+                          hourlyForecast: widget.dayForecast.hourlyForecast!),
+                    ),
+                  ],
+                ),
+                crossFadeState: _expanded
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 100))
+        ],
       ),
     );
   }
@@ -111,8 +106,8 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
               ),
               Padding(
                 padding: const EdgeInsets.all(5),
-                child: SvgPicture.asset(
-                  WeatherIcons.iconPathByName(widget.dayForecast.icon),
+                child: ForecastIconWidget(
+                  icon: widget.dayForecast.icon,
                   width: 50,
                 ),
               ),
@@ -120,7 +115,7 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
           ),
           if (widget.dayForecast.hourlyForecast != null)
             AnimatedRotation(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               turns: _expanded ? .5 : 0,
               child: Icon(
                 Icons.keyboard_arrow_down,

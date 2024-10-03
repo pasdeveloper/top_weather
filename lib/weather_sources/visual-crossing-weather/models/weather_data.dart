@@ -30,22 +30,6 @@ class WeatherData {
     required this.currentConditions,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'queryCost': queryCost,
-      'latitude': latitude,
-      'longitude': longitude,
-      'resolvedAddress': resolvedAddress,
-      'address': address,
-      'timezone': timezone,
-      'tzoffset': tzoffset,
-      'description': description,
-      'days': days.map((x) => x.toMap()).toList(),
-      'alerts': alerts.map((x) => x.toMap()).toList(),
-      'currentConditions': currentConditions.toMap(),
-    };
-  }
-
   factory WeatherData.fromMap(Map<String, dynamic> map) {
     return WeatherData(
       queryCost: map['queryCost']?.toDouble() ?? 0.0,
@@ -62,8 +46,6 @@ class WeatherData {
       currentConditions: Conditions.fromMap(map['currentConditions']),
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory WeatherData.fromJson(String source) =>
       WeatherData.fromMap(json.decode(source));

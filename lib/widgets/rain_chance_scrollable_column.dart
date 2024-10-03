@@ -17,7 +17,6 @@ class RainChanceScrollableColumn extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: hourlyForecast.hours
-            .where((hourForecast) => !hourForecast.sunriseSunset)
             .map((hourForecast) =>
                 _rainChanceTile(colorScheme, textTheme, hourForecast))
             .toList(),

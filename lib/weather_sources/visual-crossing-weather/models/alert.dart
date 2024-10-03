@@ -34,20 +34,5 @@ class Alert {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'event': event,
-      'headline': headline,
-      'endsEpoch': endsEpoch,
-      'onsetEpoch': onsetEpoch,
-      'id': id,
-      'language': language,
-      'link': link,
-      'description': description,
-    };
-  }
-
-  String toJson() => json.encode(toMap());
-
   factory Alert.fromJson(String source) => Alert.fromMap(json.decode(source));
 }

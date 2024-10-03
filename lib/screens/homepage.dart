@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:top_weather/bloc/forecast/forecast_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
+import 'package:top_weather/constants/date_formatting.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/widgets/daily_temperature_graph.dart';
 import 'package:top_weather/widgets/day_forecast_expandable_card.dart';
@@ -113,8 +114,8 @@ Widget _getBody(
   return TabBarView(
     controller: tabController,
     children: [
-      _wrapWithOverlapAbsorber(widget: _todayForecastPage(state.forecast)),
-      _wrapWithOverlapAbsorber(widget: _nextDaysForecastPage(state.forecast)),
+      _wrapWithOverlapAbsorber(widget: _todayTabContent(state.forecast)),
+      _wrapWithOverlapAbsorber(widget: _nextDaysTabContent(state.forecast)),
     ],
   );
 }
@@ -151,7 +152,7 @@ Widget _centerPageMessage(String text, {Color? color}) {
   });
 }
 
-Widget _nextDaysForecastPage(Forecast forecast) {
+Widget _nextDaysTabContent(Forecast forecast) {
   if (forecast.dailyForecast == null) {
     return _centerPageMessage('Not available');
   }
@@ -176,7 +177,7 @@ Widget _nextDaysForecastPage(Forecast forecast) {
   );
 }
 
-Widget _todayForecastPage(Forecast forecast) => Builder(builder: (context) {
+Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
       final colorScheme = Theme.of(context).colorScheme;
       final textTheme = Theme.of(context).textTheme;
       return Padding(
@@ -265,6 +266,38 @@ Widget _todayForecastPage(Forecast forecast) => Builder(builder: (context) {
                       hourlyForecast: forecast.hourlyForecast!),
                 ),
               ),
+            Row(
+              children: [
+                forecast.sunrise != null
+                    ? Expanded(
+                        child: ForecastCard(
+                          title: 'Sunrise',
+                          iconData: Icons.wb_twilight,
+                          sideIcon: true,
+                          child: Text(
+                            timeFormatter.format(forecast.sunrise!),
+                            style: textTheme.bodyLarge!
+                                .copyWith(color: colorScheme.onSurface),
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                forecast.sunset != null
+                    ? Expanded(
+                        child: ForecastCard(
+                          title: 'Sunset',
+                          iconData: Icons.nights_stay,
+                          sideIcon: true,
+                          child: Text(
+                            timeFormatter.format(forecast.sunset!),
+                            style: textTheme.bodyLarge!
+                                .copyWith(color: colorScheme.onSurface),
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            ),
             SourceInformation(
               lastUpdated: forecast.createdAt,
               weatherSource: forecast.weatherSource,

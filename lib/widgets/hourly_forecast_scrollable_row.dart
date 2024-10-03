@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/constants/date_formatting.dart';
-import 'package:top_weather/constants/weather_icons.dart';
 import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/widgets/forecast_icon.dart';
 
 class HourlyForecastScrollableRow extends StatelessWidget {
   const HourlyForecastScrollableRow({
@@ -37,19 +36,17 @@ class HourlyForecastScrollableRow extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              hourForecast.sunriseSunset
-                  ? hourForecast.description
-                  : '${hourForecast.temperatureRound}°',
+              '${hourForecast.temperatureRound}°',
               style:
                   textTheme.bodyLarge!.copyWith(color: colorScheme.onSurface),
             ),
             const SizedBox(
               height: 8,
             ),
-            SvgPicture.asset(
-              WeatherIcons.iconPathByName(hourForecast.icon),
-              height: 30,
+            ForecastIconWidget(
+              icon: hourForecast.icon,
               width: 30,
+              height: 30,
             ),
             const SizedBox(
               height: 6,

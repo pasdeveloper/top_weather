@@ -25,7 +25,7 @@ class Conditions extends Equatable {
   final double solarenergy; // MJ/m2
   final double uvindex;
   final String conditions;
-  final String icon;
+  final ConditionsIcon icon;
   final int? sunriseEpoch;
   final int? sunsetEpoch;
   final double? moonphase;
@@ -88,45 +88,6 @@ class Conditions extends Equatable {
     this.hours,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'datetime': datetime,
-      'datetimeEpoch': datetimeEpoch,
-      'temp': temp,
-      'feelslike': feelslike,
-      'humidity': humidity,
-      'dew': dew,
-      'precip': precip,
-      'precipprob': precipprob,
-      'snow': snow,
-      'snowdepth': snowdepth,
-      'windspeed': windspeed,
-      'windspeedmax': windspeedmax,
-      'windspeedmean': windspeedmean,
-      'windspeedmin': windspeedmin,
-      'winddir': winddir,
-      'pressure': pressure,
-      'visibility': visibility,
-      'cloudcover': cloudcover,
-      'solarradiation': solarradiation,
-      'solarenergy': solarenergy,
-      'uvindex': uvindex,
-      'conditions': conditions,
-      'icon': icon,
-      'sunriseEpoch': sunriseEpoch,
-      'sunsetEpoch': sunsetEpoch,
-      'moonphase': moonphase,
-      'moonriseEpoch': moonriseEpoch,
-      'moonsetEpoch': moonsetEpoch,
-      'tempmax': tempmax,
-      'tempmin': tempmin,
-      'feelslikemax': feelslikemax,
-      'feelslikemin': feelslikemin,
-      'description': description,
-      'hours': hours?.map((x) => x.toMap()).toList(),
-    };
-  }
-
   factory Conditions.fromMap(Map<String, dynamic> map) {
     return Conditions(
       datetime: map['datetime'] ?? '',
@@ -135,7 +96,7 @@ class Conditions extends Equatable {
       feelslike: map['feelslike']?.toDouble() ?? 0.0,
       humidity: map['humidity']?.toDouble() ?? 0.0,
       dew: map['dew']?.toDouble() ?? 0.0,
-      precip: map['precip']?.toDouble() ?? 0.0,
+      precip: map['precip']?.toDouble(),
       precipprob: map['precipprob']?.toDouble(),
       snow: map['snow']?.toDouble() ?? 0.0,
       snowdepth: map['snowdepth']?.toDouble() ?? 0.0,
@@ -151,7 +112,7 @@ class Conditions extends Equatable {
       solarenergy: map['solarenergy']?.toDouble() ?? 0.0,
       uvindex: map['uvindex']?.toDouble() ?? 0.0,
       conditions: map['conditions'] ?? '',
-      icon: map['icon'] ?? '',
+      icon: ConditionsIcon.fromMap(map['icon']),
       sunriseEpoch: map['sunriseEpoch']?.toInt(),
       sunsetEpoch: map['sunsetEpoch']?.toInt(),
       moonphase: map['moonphase']?.toDouble(),
@@ -192,8 +153,7 @@ class Conditions extends Equatable {
     double? solarenergy,
     double? uvindex,
     String? conditions,
-    String? icon,
-    List<String>? stations,
+    ConditionsIcon? icon,
     int? sunriseEpoch,
     int? sunsetEpoch,
     double? moonphase,
@@ -289,12 +249,11 @@ class Conditions extends Equatable {
     ];
   }
 
-  String toJson() => json.encode(toMap());
-
   factory Conditions.fromJson(String source) =>
       Conditions.fromMap(json.decode(source));
 }
 
+// enum
 enum Moonphase {
   newMoon,
   waxingCrescent,
@@ -304,4 +263,63 @@ enum Moonphase {
   waningGibbous,
   lastQuarter,
   waningCrescent,
+}
+
+// enum
+enum ConditionsIcon {
+  snow,
+  snowShowersDay,
+  snowShowersNight,
+  thunderRain,
+  thunderShowersDay,
+  thunderShowersNight,
+  rain,
+  showersDay,
+  showersNight,
+  fog,
+  wind,
+  cloudy,
+  partlyCloudyDay,
+  partlyCloudyNight,
+  clearDay,
+  clearNight;
+
+  factory ConditionsIcon.fromMap(String name) {
+    switch (name) {
+      case 'snow':
+        return ConditionsIcon.snow;
+      case 'snow-showers-day':
+        return ConditionsIcon.snowShowersDay;
+      case 'snow-showers-night':
+        return ConditionsIcon.snowShowersNight;
+      case 'thunder-rain':
+        return ConditionsIcon.thunderRain;
+      case 'thunder-showers-day':
+        return ConditionsIcon.thunderShowersDay;
+      case 'thunder-showers-night':
+        return ConditionsIcon.thunderShowersNight;
+      case 'rain':
+        return ConditionsIcon.rain;
+      case 'showers-day':
+        return ConditionsIcon.showersDay;
+      case 'showers-night':
+        return ConditionsIcon.showersNight;
+      case 'fog':
+        return ConditionsIcon.fog;
+      case 'wind':
+        return ConditionsIcon.wind;
+      case 'cloudy':
+        return ConditionsIcon.cloudy;
+      case 'partly-cloudy-day':
+        return ConditionsIcon.partlyCloudyDay;
+      case 'partly-cloudy-night':
+        return ConditionsIcon.partlyCloudyNight;
+      case 'clear-day':
+        return ConditionsIcon.clearDay;
+      case 'clear-night':
+        return ConditionsIcon.clearNight;
+      default:
+        throw Exception('Unknown weather icon: $name');
+    }
+  }
 }

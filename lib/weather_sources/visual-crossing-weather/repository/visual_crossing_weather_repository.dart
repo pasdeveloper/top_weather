@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 // ignore: unused_import
@@ -19,6 +18,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
     {
       'key': const String.fromEnvironment('API_KEY'),
       'unitGroup': 'metric',
+      'iconSet': 'icons2',
     },
   );
 
@@ -27,7 +27,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
     final url = _getLatLonUri(location.latitude, location.longitude);
 
     final data = await _getWeatherData(url);
-    final forecast = _toWeatherForecast(data);
+    final forecast = _toForecast(data);
     return forecast;
   }
 
@@ -75,15 +75,11 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
           reason: DataFetchExceptionReason.other);
     }
 
-    final decodedJson = json.decode(response.body);
-
-    final data = WeatherData.fromMap(decodedJson);
+    final data = WeatherData.fromJson(response.body);
     return data;
   }
 
-  Forecast _toWeatherForecast(WeatherData data) {
-    final sunriseSunset = _getNextSunriseSunset(data);
-
+  Forecast _toForecast(WeatherData data) {
     final hours = _getNext24Hours(data);
     final days = _getNext7Days(data);
 
@@ -91,7 +87,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
 
     return Forecast(
       currentLocation: data.resolvedAddress,
-      icon: now.icon,
+      icon: _toForecastIcon(now.icon),
       description: now.conditions,
       nowTemperature: now.temp,
       todayMinTemperature: data.days[0].tempmin ?? 0,
@@ -99,11 +95,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       feelsLikeTemperature: now.feelslike,
       weatherSource: 'Visual Crossing Weather',
       weatherDataDatetime: _toDateTime(now.datetimeEpoch),
-      sunriseSunset: sunriseSunset,
-      hourlyForecast: HourlyForecast.withSunriseSunset(
-        hours: hours,
-        sunriseSunset: sunriseSunset,
-      ),
+      hourlyForecast: HourlyForecast(hours: hours),
       dailyForecast: DailyForecast(days: days),
       windSpeed: now.windspeed,
       windDirection: now.winddir,
@@ -113,28 +105,67 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       precipitationProbability: now.precipprob,
       visibility: now.visibility,
       cloudCoverPercentage: now.cloudcover,
+      sunrise: now.sunriseEpoch != null ? _toDateTime(now.sunriseEpoch!) : null,
+      sunset: now.sunsetEpoch != null ? _toDateTime(now.sunsetEpoch!) : null,
     );
   }
 
-  SunriseSunset _getNextSunriseSunset(WeatherData data) {
-    final now = _toDateTime(data.currentConditions.datetimeEpoch);
-    DateTime? nextSunriseDateTime =
-        _toDateTime(data.currentConditions.sunriseEpoch!);
-    if (nextSunriseDateTime.isBefore(now)) {
-      nextSunriseDateTime =
-          data.days.length > 1 ? _toDateTime(data.days[1].sunriseEpoch!) : null;
+  ForecastIcon _toForecastIcon(ConditionsIcon icon) {
+    switch (icon) {
+      case ConditionsIcon.snow:
+        return ForecastIcon.showersSnow;
+      case ConditionsIcon.snowShowersDay:
+        return ForecastIcon.scatteredSnowShowersDay;
+      case ConditionsIcon.snowShowersNight:
+        return ForecastIcon.scatteredSnowShowersNight;
+      case ConditionsIcon.thunderRain:
+        return ForecastIcon.isolatedThunderstorms;
+      case ConditionsIcon.thunderShowersDay:
+        return ForecastIcon.isolatedScatteredThunderstormsDay;
+      case ConditionsIcon.thunderShowersNight:
+        return ForecastIcon.isolatedScatteredThunderstormsNight;
+      case ConditionsIcon.rain:
+        return ForecastIcon.showersRain;
+      case ConditionsIcon.showersDay:
+        return ForecastIcon.scatteredShowersDay;
+      case ConditionsIcon.showersNight:
+        return ForecastIcon.scatteredShowersNight;
+      case ConditionsIcon.fog:
+        return ForecastIcon.hazeFogDustSmoke;
+      case ConditionsIcon.wind:
+        return ForecastIcon.windyBreezy;
+      case ConditionsIcon.cloudy:
+        return ForecastIcon.cloudy;
+      case ConditionsIcon.partlyCloudyDay:
+        return ForecastIcon.partlyCloudyDay;
+      case ConditionsIcon.partlyCloudyNight:
+        return ForecastIcon.partlyCloudyNight;
+      case ConditionsIcon.clearDay:
+        return ForecastIcon.clearDay;
+      case ConditionsIcon.clearNight:
+        return ForecastIcon.clearNight;
     }
-    DateTime? nextSunsetDateTime =
-        _toDateTime(data.currentConditions.sunsetEpoch!);
-    if (nextSunsetDateTime.isBefore(now)) {
-      nextSunsetDateTime =
-          data.days.length > 1 ? _toDateTime(data.days[1].sunsetEpoch!) : null;
-    }
-    return SunriseSunset(
-      sunrise: nextSunriseDateTime,
-      sunset: nextSunsetDateTime,
-    );
   }
+
+  // SunriseSunset _getNextSunriseSunset(WeatherData data) {
+  //   final now = _toDateTime(data.currentConditions.datetimeEpoch);
+  //   DateTime? nextSunriseDateTime =
+  //       _toDateTime(data.currentConditions.sunriseEpoch!);
+  //   if (nextSunriseDateTime.isBefore(now)) {
+  //     nextSunriseDateTime =
+  //         data.days.length > 1 ? _toDateTime(data.days[1].sunriseEpoch!) : null;
+  //   }
+  //   DateTime? nextSunsetDateTime =
+  //       _toDateTime(data.currentConditions.sunsetEpoch!);
+  //   if (nextSunsetDateTime.isBefore(now)) {
+  //     nextSunsetDateTime =
+  //         data.days.length > 1 ? _toDateTime(data.days[1].sunsetEpoch!) : null;
+  //   }
+  //   return SunriseSunset(
+  //     sunrise: nextSunriseDateTime,
+  //     sunset: nextSunsetDateTime,
+  //   );
+  // }
 
   DateTime _toDateTime(int seconds) {
     return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
@@ -161,7 +192,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
   HourForecast _toHourForecast(Conditions conditions) => HourForecast(
         datetime: _toDateTime(conditions.datetimeEpoch),
         temperature: conditions.temp,
-        icon: conditions.icon,
+        icon: _toForecastIcon(conditions.icon),
         description: conditions.conditions,
         precipitationProbability: conditions.precipprob?.round(),
       );
@@ -180,7 +211,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
           datetime: _toDateTime(dayData.datetimeEpoch),
           minTemperature: dayData.tempmin!,
           maxTemperature: dayData.tempmax!,
-          icon: dayData.icon,
+          icon: _toForecastIcon(dayData.icon),
           description: dayData.conditions,
           precipitationProbability: dayData.precipprob?.round(),
           hourlyForecast: hourlyForecast,
