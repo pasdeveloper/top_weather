@@ -100,18 +100,29 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor),
       ),
       actions: [
-        IconButton(
-            onPressed: () {
-              final themeCubit = context.read<ThemeCubit>();
-              final currentTheme = themeCubit.state.themeMode;
-              themeCubit.setTheme(currentTheme == ThemeMode.light
-                  ? ThemeMode.dark
-                  : ThemeMode.light);
-            },
-            icon: Icon(
-              Icons.brightness_6,
-              color: textColor,
-            )),
+        BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            return IconButton(
+              onPressed: () {
+                final nextTheme = switch (state.themeMode) {
+                  ThemeMode.system => ThemeMode.light,
+                  ThemeMode.light => ThemeMode.dark,
+                  ThemeMode.dark => ThemeMode.system,
+                };
+
+                context.read<ThemeCubit>().setTheme(nextTheme);
+              },
+              icon: Icon(
+                switch (state.themeMode) {
+                  ThemeMode.system => Icons.brightness_auto,
+                  ThemeMode.light => Icons.brightness_5,
+                  ThemeMode.dark => Icons.brightness_4,
+                },
+                color: textColor,
+              ),
+            );
+          },
+        ),
         IconButton(
             onPressed: () => _openLocations(context),
             icon: Icon(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:top_weather/bloc/theme/theme_cubit.dart';
 import 'package:top_weather/constants/assets.dart';
 import 'package:top_weather/models/forecast.dart';
 
@@ -22,7 +20,7 @@ class ForecastIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.read<ThemeCubit>().state.themeMode == ThemeMode.dark;
+    final isDark = Theme.of(context).colorScheme.brightness == Brightness.dark;
     return SvgPicture.asset(
       _getAsset(icon, isDark),
       width: width,

@@ -16,8 +16,6 @@ import 'package:top_weather/widgets/rain_chance_scrollable_column.dart';
 import 'package:top_weather/widgets/source_information.dart';
 import 'package:top_weather/widgets/tab_bar_persistent_header_delegate.dart';
 
-const double _gap = 8;
-
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 

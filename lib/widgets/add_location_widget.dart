@@ -27,10 +27,11 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
           Expanded(
             child: TextFormField(
               style: TextStyle(color: colorScheme.onSurface),
-              decoration: const InputDecoration(
-                labelText: 'Add location',
-                // hintText: 'Rome, Italy...',
-              ),
+              decoration: InputDecoration(
+                  labelText: 'Add location',
+                  hintText: 'Search for city name or street name...',
+                  hintStyle:
+                      TextStyle(color: colorScheme.onSurface.withOpacity(.5))),
               textInputAction: TextInputAction.search,
               validator: _locationNameValidator,
               onFieldSubmitted: (_) => _submitLocation(),
@@ -40,12 +41,18 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
           const SizedBox(
             width: 10,
           ),
-          searchLoading
-              ? const CircularProgressIndicator.adaptive()
-              : IconButton.filled(
-                  onPressed: _submitLocation,
-                  icon: const Icon(Icons.add_location_alt_outlined),
-                ),
+          SizedBox(
+            width: 45,
+            height: 55,
+            child: Center(
+              child: searchLoading
+                  ? const CircularProgressIndicator.adaptive()
+                  : IconButton.filled(
+                      onPressed: _submitLocation,
+                      icon: const Icon(Icons.add_location_alt_outlined),
+                    ),
+            ),
+          ),
         ],
       ),
     );
