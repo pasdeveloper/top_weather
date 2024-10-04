@@ -81,6 +81,7 @@ Widget _locationsList(BuildContext context, List<Location> locations) =>
             context.read<SelectedLocationBloc>().state.selectedLocation?.id ==
                 location.id;
         final colorScheme = Theme.of(context).colorScheme;
+        final textTheme = Theme.of(context).textTheme;
         return Dismissible(
           key: ValueKey(location.id),
           onDismissed: (_) {
@@ -112,7 +113,9 @@ Widget _locationsList(BuildContext context, List<Location> locations) =>
           confirmDismiss: (_) => showDialog(
             context: context,
             builder: (context) => AlertDialog.adaptive(
-              title: Text(AppLocalizations.of(context)!.deleteLocationQuestion),
+              title: Text(AppLocalizations.of(context)!.deleteLocationQuestion,
+                  style: textTheme.titleLarge!
+                      .copyWith(color: colorScheme.onSurface)),
               actions: [
                 TextButton(
                     onPressed: () => Navigator.pop(context),
