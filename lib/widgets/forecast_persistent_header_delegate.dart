@@ -145,6 +145,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '${forecast.nowTemperature}°',

@@ -114,13 +114,26 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
             ],
           ),
           if (widget.dayForecast.hourlyForecast != null)
-            AnimatedRotation(
-              duration: const Duration(milliseconds: 100),
-              turns: _expanded ? .5 : 0,
-              child: Icon(
-                Icons.keyboard_arrow_down,
-                color: colorScheme.onSurface,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: colorScheme.surface,
+                  ),
+                  child: AnimatedRotation(
+                    duration: const Duration(milliseconds: 100),
+                    turns: _expanded ? .5 : 0,
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: colorScheme.onSurface,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ],
             ),
         ],
       ),

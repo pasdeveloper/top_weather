@@ -41,8 +41,12 @@ class Locations extends StatelessWidget {
           body: Column(
             children: [
               const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: AddLocationWidget()),
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: AddLocationWidget(),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Expanded(
                 child: state.locations.isEmpty
                     ? _emptyList(context)
@@ -69,37 +73,70 @@ Widget _emptyList(BuildContext context) => Center(
 Widget _locationsList(BuildContext context, List<Location> locations) =>
     ListView.builder(
       itemCount: locations.length,
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       itemBuilder: (context, index) {
         final location = locations[index];
         final isSelected =
             context.read<SelectedLocationBloc>().state.selectedLocation?.id ==
                 location.id;
-        return ListTile(
-          onTap: () {
-            context
-                .read<SelectedLocationBloc>()
-                .add(UpdateSelectedLocationEvent(toSelect: location));
-            Navigator.pop(context);
+        final colorScheme = Theme.of(context).colorScheme;
+        return Dismissible(
+          key: ValueKey(location.id),
+          onDismissed: (_) {
+            if (isSelected) {
+              context
+                  .read<SelectedLocationBloc>()
+                  .add(ClearSelectedLocationEvent());
+            }
+            context.read<LocationsCubit>().removeLocation(location);
           },
-          leading: isSelected
-              ? Icon(
-                  Icons.check_circle,
-                  color: Theme.of(context).colorScheme.primary,
-                )
-              : null,
-          title: Text(location.name),
-          subtitle: Text('${location.latitude}, ${location.longitude}'),
-          trailing: IconButton(
-              onPressed: () {
-                if (isSelected) {
-                  context
-                      .read<SelectedLocationBloc>()
-                      .add(ClearSelectedLocationEvent());
-                }
-                context.read<LocationsCubit>().removeLocation(location);
-              },
-              icon: const Icon(Icons.delete)),
+          background: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            color: colorScheme.error,
+            alignment: Alignment.centerLeft,
+            child: Icon(
+              Icons.delete,
+              color: colorScheme.onError,
+            ),
+          ),
+          secondaryBackground: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            color: colorScheme.error,
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.delete,
+              color: colorScheme.onError,
+            ),
+          ),
+          confirmDismiss: (_) => showDialog(
+            context: context,
+            builder: (context) => AlertDialog.adaptive(
+              title: const Text('Do you want to delete this location?'),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancel')),
+                TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('Delete')),
+              ],
+            ),
+          ),
+          child: ListTile(
+            onTap: () {
+              context
+                  .read<SelectedLocationBloc>()
+                  .add(UpdateSelectedLocationEvent(toSelect: location));
+              Navigator.pop(context);
+            },
+            leading: isSelected
+                ? Icon(
+                    Icons.check_circle,
+                    color: colorScheme.primary,
+                  )
+                : null,
+            title: Text(location.name),
+            subtitle: Text('${location.latitude}, ${location.longitude}'),
+          ),
         );
       },
     );

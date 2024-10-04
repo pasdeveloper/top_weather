@@ -28,8 +28,35 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
             child: TextFormField(
               style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
-                  labelText: 'Add location',
-                  hintText: 'Search for city name or street name...',
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  suffixIcon: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 1,
+                          color: colorScheme.onSurface.withOpacity(.5),
+                        ),
+                      ),
+                    ),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    child: searchLoading
+                        ? Container(
+                            padding: const EdgeInsets.all(8),
+                            width: 48,
+                            height: 48,
+                            child: const CircularProgressIndicator.adaptive(),
+                          )
+                        : IconButton(
+                            onPressed: _submitLocation,
+                            icon: const Icon(Icons.add_location_alt),
+                          ),
+                  ),
+                  hintText: 'City name or street name...',
                   hintStyle:
                       TextStyle(color: colorScheme.onSurface.withOpacity(.5))),
               textInputAction: TextInputAction.search,
@@ -38,21 +65,21 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
               onSaved: (value) => _searchLocation(value!),
             ),
           ),
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            width: 45,
-            height: 55,
-            child: Center(
-              child: searchLoading
-                  ? const CircularProgressIndicator.adaptive()
-                  : IconButton.filled(
-                      onPressed: _submitLocation,
-                      icon: const Icon(Icons.add_location_alt_outlined),
-                    ),
-            ),
-          ),
+          // const SizedBox(
+          //   width: 10,
+          // ),
+          // SizedBox(
+          //   width: 45,
+          //   height: 55,
+          //   child: Center(
+          //     child: searchLoading
+          //         ? const CircularProgressIndicator.adaptive()
+          //         : IconButton.filled(
+          //             onPressed: _submitLocation,
+          //             icon: const Icon(Icons.add_location_alt),
+          //           ),
+          //   ),
+          // ),
         ],
       ),
     );

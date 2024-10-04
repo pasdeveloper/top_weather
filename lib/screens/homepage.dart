@@ -257,7 +257,7 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
             if (forecast.hourlyForecast != null)
               ForecastCard(
                 title: 'Rain chance',
-                iconData: Icons.thunderstorm,
+                iconData: Icons.thunderstorm_outlined,
                 child: SizedBox(
                   height: 180,
                   child: RainChanceScrollableColumn(
@@ -270,7 +270,7 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
                     ? Expanded(
                         child: ForecastCard(
                           title: 'Sunrise',
-                          iconData: Icons.wb_twilight,
+                          iconData: Icons.wb_sunny,
                           sideIcon: true,
                           child: Text(
                             timeFormatter.format(forecast.sunrise!),
@@ -284,7 +284,7 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
                     ? Expanded(
                         child: ForecastCard(
                           title: 'Sunset',
-                          iconData: Icons.nights_stay,
+                          iconData: Icons.wb_twilight,
                           sideIcon: true,
                           child: Text(
                             timeFormatter.format(forecast.sunset!),
