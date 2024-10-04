@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:top_weather/constants/date_formatting.dart';
+import 'package:top_weather/core/locale_date_formatting.dart';
+import 'package:top_weather/l10n/localizations_export.dart';
 import 'package:top_weather/models/forecast.dart';
 
 class DailyTemperatureGraph extends StatelessWidget {
@@ -22,6 +23,9 @@ class DailyTemperatureGraph extends StatelessWidget {
     final minTemperature = dailyForecast.days
         .map((dayForecast) => dayForecast.minTemperature)
         .reduce((t1, t2) => t1 < t2 ? t1 : t2);
+
+    final dateFormatting =
+        LocaleDateFormatting(AppLocalizations.of(context)!.localeName);
 
     return AspectRatio(
       aspectRatio: 2,
@@ -90,7 +94,7 @@ class DailyTemperatureGraph extends StatelessWidget {
                   fitInside: SideTitleFitInsideData.fromTitleMeta(meta,
                       distanceFromEdge: 0),
                   child: Text(
-                    shortDayNameFormatter.format(nextDate),
+                    dateFormatting.shortDayNameFormatter.format(nextDate),
                     style: textTheme.labelMedium!
                         .copyWith(color: colorScheme.onPrimaryContainer),
                   ),

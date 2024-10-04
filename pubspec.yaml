@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
+  flutter_localizations:
+    sdk: flutter
   flutter_svg: ^2.0.10+1
   google_fonts: ^6.2.1
   http: ^1.2.2
@@ -26,6 +28,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/weather/icon/dark/

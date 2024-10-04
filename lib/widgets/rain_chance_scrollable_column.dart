@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:top_weather/constants/date_formatting.dart';
+import 'package:top_weather/constants/time_formatting.dart';
 import 'package:top_weather/models/forecast.dart';
 
 class RainChanceScrollableColumn extends StatelessWidget {

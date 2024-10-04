@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:top_weather/bloc/locations/locations_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
+import 'package:top_weather/l10n/localizations_export.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/widgets/add_location_widget.dart';
 
@@ -27,7 +28,8 @@ class Locations extends StatelessWidget {
                       Navigator.pop(context);
                       context.read<LocationsCubit>().errorDeliveredToUser();
                     },
-                    child: const Text('Ok'))
+                    child: Text(
+                        AppLocalizations.of(context)!.locationsErrorConfirm))
               ],
             ),
           );
@@ -36,7 +38,7 @@ class Locations extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Locations'),
+            title: Text(AppLocalizations.of(context)!.locations),
           ),
           body: Column(
             children: [
@@ -62,7 +64,7 @@ class Locations extends StatelessWidget {
 
 Widget _emptyList(BuildContext context) => Center(
       child: Text(
-        'No location yet, add a new one',
+        AppLocalizations.of(context)!.emptyLocations,
         style: TextStyle(
             fontSize: 20,
             fontStyle: FontStyle.italic,
@@ -110,14 +112,16 @@ Widget _locationsList(BuildContext context, List<Location> locations) =>
           confirmDismiss: (_) => showDialog(
             context: context,
             builder: (context) => AlertDialog.adaptive(
-              title: const Text('Do you want to delete this location?'),
+              title: Text(AppLocalizations.of(context)!.deleteLocationQuestion),
               actions: [
                 TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel')),
+                    child: Text(
+                        AppLocalizations.of(context)!.deleteLocationCancel)),
                 TextButton(
                     onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Delete')),
+                    child: Text(
+                        AppLocalizations.of(context)!.deleteLocationConfirm)),
               ],
             ),
           ),

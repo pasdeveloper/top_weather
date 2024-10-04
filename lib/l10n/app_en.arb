@@ -1,0 +1,52 @@
+{
+  "@@locale": "en",
+  "@feelsLikeTemperature": {
+    "placeholders": {
+      "temperature": {
+        "type": "double"
+      }
+    }
+  },
+  "@lastUpdated": {
+    "placeholders": {
+      "lastUpdated": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "addLocationErrorEmptyName": "Name cannot be empty",
+  "addLocationErrorInvalid": "Invalid name",
+  "addLocationHint": "City name or street name...",
+  "dailyTemperature": "Daily temperature",
+  "deleteLocationCancel": "Cancel",
+  "deleteLocationConfirm": "Delete",
+  "deleteLocationQuestion": "Do you want to delete this location?",
+  "east": "East",
+  "emptyForecast": "Please select a location",
+  "emptyLocations": "No location yet, add a new one",
+  "feelsLikeTemperature": "Feels like {temperature}°",
+  "hourlyForecast": "Hourly forecast",
+  "lastUpdated": "Last updated at {lastUpdated} from {source}",
+  "loadingForecast": "Loading...",
+  "locations": "Locations",
+  "locationsErrorConfirm": "Ok",
+  "nextDaysButton": "Next days",
+  "north": "North",
+  "northEast": "NorthEast",
+  "northWest": "NorthWest",
+  "pressure": "Pressure",
+  "rainChance": "Rain chance",
+  "south": "South",
+  "southEast": "SouthEast",
+  "southWest": "SouthWest",
+  "sunrise": "Sunrise",
+  "sunset": "Sunset",
+  "todayButton": "Today",
+  "uvIndex": "UV index",
+  "west": "West",
+  "windDirection": "Wind direction",
+  "windSpeed": "Wind speed"
+}

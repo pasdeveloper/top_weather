@@ -6,7 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/bloc/header/header_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
 import 'package:top_weather/bloc/theme/theme_cubit.dart';
-import 'package:top_weather/constants/date_formatting.dart';
+import 'package:top_weather/core/locale_date_formatting.dart';
+import 'package:top_weather/l10n/localizations_export.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/screens/locations.dart';
@@ -28,7 +29,6 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final double collapsePercentage =
         min(shrinkOffset / (maxExtent - minExtent), 1);
@@ -64,8 +64,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _appBar(context, collapsePercentage),
-              if (!forecast.empty)
-                _temperature(textTheme, colorScheme, collapsePercentage),
+              if (!forecast.empty) _temperature(context, collapsePercentage),
               SizedBox(
                 height: (1 - collapsePercentage) * 60,
               )
@@ -76,7 +75,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               bottom: 0,
               right: 0,
               left: 0,
-              child: _descriptions(textTheme, collapsePercentage),
+              child: _descriptions(context, collapsePercentage),
             ),
         ],
       ),
@@ -133,8 +132,9 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _temperature(
-      TextTheme textTheme, ColorScheme colorScheme, double collapsePercentage) {
+  Widget _temperature(BuildContext context, double collapsePercentage) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final textColor =
         ColorTween(begin: Colors.white, end: colorScheme.onPrimaryContainer)
             .transform(collapsePercentage);
@@ -153,7 +153,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                     .copyWith(fontWeight: FontWeight.bold, color: textColor),
               ),
               Text(
-                'Feels like ${forecast.feelsLikeTemperature}°',
+                AppLocalizations.of(context)!
+                    .feelsLikeTemperature(forecast.feelsLikeTemperature),
                 style: textTheme.titleMedium!.copyWith(color: textColor),
               ),
             ],
@@ -179,8 +180,12 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _descriptions(TextTheme textTheme, double collapsePercentage) {
+  Widget _descriptions(BuildContext context, double collapsePercentage) {
+    final textTheme = Theme.of(context).textTheme;
+    final dateFormatting =
+        LocaleDateFormatting(AppLocalizations.of(context)!.localeName);
     final color = Colors.white.withOpacity(1 - collapsePercentage);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
       child: Row(
@@ -188,7 +193,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            dateFormatter.format(forecast.weatherDataDatetime),
+            dateFormatting.dateFormatter.format(forecast.weatherDataDatetime),
             style: textTheme.titleMedium!.copyWith(color: color),
           ),
           Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:top_weather/bloc/header/header_cubit.dart';
 
 class TabButtons extends StatefulWidget {
@@ -57,13 +58,25 @@ class _TabButtonsState extends State<TabButtons> {
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Row(
             children: [
-              _tabButton('Today', colorScheme, textTheme, state.collapsed, 0,
-                  selectedIndex, () => widget.tabController.index = 0),
+              _tabButton(
+                  AppLocalizations.of(context)!.todayButton,
+                  colorScheme,
+                  textTheme,
+                  state.collapsed,
+                  0,
+                  selectedIndex,
+                  () => widget.tabController.index = 0),
               const SizedBox(
                 width: 8,
               ),
-              _tabButton('Next Days', colorScheme, textTheme, state.collapsed,
-                  1, selectedIndex, () => widget.tabController.index = 1),
+              _tabButton(
+                  AppLocalizations.of(context)!.nextDaysButton,
+                  colorScheme,
+                  textTheme,
+                  state.collapsed,
+                  1,
+                  selectedIndex,
+                  () => widget.tabController.index = 1),
             ],
           ),
         );

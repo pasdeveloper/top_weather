@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:top_weather/bloc/forecast/forecast_cubit.dart';
 import 'package:top_weather/bloc/selected_location/selected_location_bloc.dart';
-import 'package:top_weather/constants/date_formatting.dart';
+import 'package:top_weather/core/locale_date_formatting.dart';
+import 'package:top_weather/l10n/localizations_export.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/widgets/daily_temperature_graph.dart';
 import 'package:top_weather/widgets/day_forecast_expandable_card.dart';
@@ -43,7 +44,6 @@ class _HomepageState extends State<Homepage>
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ForecastCubit>().state;
-    final colorScheme = Theme.of(context).colorScheme;
 
     Future<void> refreshForecast() async {
       final selectedLocation =
@@ -85,7 +85,7 @@ class _HomepageState extends State<Homepage>
                   pinned: true,
                 ),
             ],
-            body: _getBody(state, colorScheme, _tabController),
+            body: _getBody(state, context, _tabController),
           ),
         ),
       ),
@@ -94,11 +94,12 @@ class _HomepageState extends State<Homepage>
 }
 
 Widget _getBody(
-    ForecastState state, ColorScheme colorScheme, TabController tabController) {
+    ForecastState state, BuildContext context, TabController tabController) {
+  final colorScheme = Theme.of(context).colorScheme;
   final status = state.status;
 
   if (status == ForecastStatus.empty) {
-    return _centerPageMessage('Please select a location');
+    return _centerPageMessage(AppLocalizations.of(context)!.emptyForecast);
   }
 
   if (status == ForecastStatus.error) {
@@ -106,7 +107,7 @@ Widget _getBody(
   }
 
   if (status == ForecastStatus.loading && state.forecast.empty) {
-    return _centerPageMessage('Loading forecast...');
+    return _centerPageMessage(AppLocalizations.of(context)!.loadingForecast);
   }
 
   return TabBarView(
@@ -152,7 +153,7 @@ Widget _centerPageMessage(String text, {Color? color}) {
 
 Widget _nextDaysTabContent(Forecast forecast) {
   if (forecast.dailyForecast == null) {
-    return _centerPageMessage('Not available');
+    return const SizedBox.shrink();
   }
 
   final List<DayForecast> days = forecast.dailyForecast!.days;
@@ -178,6 +179,8 @@ Widget _nextDaysTabContent(Forecast forecast) {
 Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
       final colorScheme = Theme.of(context).colorScheme;
       final textTheme = Theme.of(context).textTheme;
+      final dateFormatting =
+          LocaleDateFormatting(AppLocalizations.of(context)!.localeName);
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
@@ -186,7 +189,7 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
               children: [
                 Expanded(
                   child: ForecastCard(
-                    title: 'Wind speed',
+                    title: AppLocalizations.of(context)!.windSpeed,
                     iconData: Icons.wind_power,
                     sideIcon: true,
                     child: Text(
@@ -198,14 +201,14 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
                 ),
                 Expanded(
                   child: ForecastCard(
-                    title: 'Wind direction',
+                    title: AppLocalizations.of(context)!.windDirection,
                     sideIcon: true,
                     customIcon: Transform.rotate(
                       angle: forecast.windDirection / 180 * pi,
                       child: const ForecastCardIcon(iconData: Icons.navigation),
                     ),
                     child: Text(
-                      _degreesToDirection(forecast.windDirection),
+                      _degreesToDirection(forecast.windDirection, context),
                       style: textTheme.bodyLarge!
                           .copyWith(color: colorScheme.onSurface),
                     ),
@@ -217,7 +220,7 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
               children: [
                 Expanded(
                   child: ForecastCard(
-                    title: 'Pressure',
+                    title: AppLocalizations.of(context)!.pressure,
                     iconData: Icons.waves,
                     sideIcon: true,
                     child: Text(
@@ -229,7 +232,7 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
                 ),
                 Expanded(
                   child: ForecastCard(
-                      title: 'UV index',
+                      title: AppLocalizations.of(context)!.uvIndex,
                       iconData: Icons.wb_sunny,
                       sideIcon: true,
                       child: Text(
@@ -242,21 +245,21 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
             ),
             if (forecast.hourlyForecast != null)
               ForecastCard(
-                title: 'Hourly forecast',
+                title: AppLocalizations.of(context)!.hourlyForecast,
                 iconData: Icons.schedule,
                 child: HourlyForecastScrollableRow(
                     hourlyForecast: forecast.hourlyForecast!),
               ),
             if (forecast.dailyForecast != null)
               ForecastCard(
-                title: 'Daily temperature',
+                title: AppLocalizations.of(context)!.dailyTemperature,
                 iconData: Icons.thermostat,
                 child: DailyTemperatureGraph(
                     dailyForecast: forecast.dailyForecast!),
               ),
             if (forecast.hourlyForecast != null)
               ForecastCard(
-                title: 'Rain chance',
+                title: AppLocalizations.of(context)!.rainChance,
                 iconData: Icons.thunderstorm_outlined,
                 child: SizedBox(
                   height: 180,
@@ -269,11 +272,12 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
                 forecast.sunrise != null
                     ? Expanded(
                         child: ForecastCard(
-                          title: 'Sunrise',
+                          title: AppLocalizations.of(context)!.sunrise,
                           iconData: Icons.wb_sunny,
                           sideIcon: true,
                           child: Text(
-                            timeFormatter.format(forecast.sunrise!),
+                            dateFormatting.timeFormatter
+                                .format(forecast.sunrise!),
                             style: textTheme.bodyLarge!
                                 .copyWith(color: colorScheme.onSurface),
                           ),
@@ -283,11 +287,12 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
                 forecast.sunset != null
                     ? Expanded(
                         child: ForecastCard(
-                          title: 'Sunset',
+                          title: AppLocalizations.of(context)!.sunset,
                           iconData: Icons.wb_twilight,
                           sideIcon: true,
                           child: Text(
-                            timeFormatter.format(forecast.sunset!),
+                            dateFormatting.timeFormatter
+                                .format(forecast.sunset!),
                             style: textTheme.bodyLarge!
                                 .copyWith(color: colorScheme.onSurface),
                           ),
@@ -305,14 +310,14 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
       );
     });
 
-String _degreesToDirection(double windDirection) {
-  if (windDirection < 45) return 'North';
-  if (windDirection < 90) return 'NorthEast';
-  if (windDirection < 135) return 'East';
-  if (windDirection < 180) return 'SouthEast';
-  if (windDirection < 225) return 'South';
-  if (windDirection < 270) return 'SouthWest';
-  if (windDirection < 315) return 'West';
-  if (windDirection < 360) return 'NorthWest';
-  return 'North';
+String _degreesToDirection(double windDirection, BuildContext context) {
+  if (windDirection < 45) return AppLocalizations.of(context)!.north;
+  if (windDirection < 90) return AppLocalizations.of(context)!.northEast;
+  if (windDirection < 135) return AppLocalizations.of(context)!.east;
+  if (windDirection < 180) return AppLocalizations.of(context)!.southEast;
+  if (windDirection < 225) return AppLocalizations.of(context)!.south;
+  if (windDirection < 270) return AppLocalizations.of(context)!.southWest;
+  if (windDirection < 315) return AppLocalizations.of(context)!.west;
+  if (windDirection < 360) return AppLocalizations.of(context)!.northWest;
+  return AppLocalizations.of(context)!.north;
 }

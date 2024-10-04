@@ -12,15 +12,18 @@ import 'package:top_weather/weather_sources/visual-crossing-weather/models/condi
 import 'package:top_weather/weather_sources/visual-crossing-weather/models/weather_data.dart';
 
 class VisualCrossingWeatherRepository implements WeatherRepository {
-  final _baseUrl = Uri.https(
-    'weather.visualcrossing.com',
-    'VisualCrossingWebServices/rest/services/timeline',
-    {
-      'key': const String.fromEnvironment('API_KEY'),
-      'unitGroup': 'metric',
-      'iconSet': 'icons2',
-    },
-  );
+  VisualCrossingWeatherRepository({String? languageCode})
+      : _baseUrl = Uri.https(
+          'weather.visualcrossing.com',
+          'VisualCrossingWebServices/rest/services/timeline',
+          {
+            'key': const String.fromEnvironment('API_KEY'),
+            'unitGroup': 'metric',
+            'iconSet': 'icons2',
+            'lang': languageCode
+          },
+        );
+  final Uri _baseUrl;
 
   @override
   Future<Forecast> fetchWeatherForecast(Location location) async {

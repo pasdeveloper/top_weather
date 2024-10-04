@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:top_weather/constants/date_formatting.dart';
+import 'package:top_weather/core/locale_date_formatting.dart';
+import 'package:top_weather/l10n/localizations_export.dart';
 import 'package:top_weather/models/forecast.dart';
 import 'package:top_weather/widgets/forecast_icon.dart';
 import 'package:top_weather/widgets/hourly_forecast_scrollable_row.dart';
@@ -22,7 +23,6 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -36,7 +36,7 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
                 : null,
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child: _daySummary(textTheme, colorScheme),
+              child: _daySummary(context),
             ),
           ),
           if (widget.dayForecast.hourlyForecast != null)
@@ -67,7 +67,11 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
     );
   }
 
-  IntrinsicHeight _daySummary(TextTheme textTheme, ColorScheme colorScheme) {
+  IntrinsicHeight _daySummary(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final dateFormatting =
+        LocaleDateFormatting(AppLocalizations.of(context)!.localeName);
     return IntrinsicHeight(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +82,8 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  dateFormatter.format(widget.dayForecast.datetime),
+                  dateFormatting.dateFormatter
+                      .format(widget.dayForecast.datetime),
                   style: textTheme.titleSmall!
                       .copyWith(color: colorScheme.onSecondaryContainer),
                 ),
