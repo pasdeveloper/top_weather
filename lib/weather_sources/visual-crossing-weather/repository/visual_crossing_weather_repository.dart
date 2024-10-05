@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 // ignore: unused_import
@@ -78,7 +79,9 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
           reason: DataFetchExceptionReason.other);
     }
 
-    final data = WeatherData.fromJson(response.body);
+    final body = utf8.decode(response.bodyBytes);
+
+    final data = WeatherData.fromJson(body);
     return data;
   }
 
