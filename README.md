@@ -13,10 +13,7 @@ Simple weather app using Visual Crossing Weather API and based on Figma design [
 
 ## Screenshots
 
-<img src="assets\screenshots\1.png" width="200">
-<img src="assets\screenshots\2.png" width="200">
-<img src="assets\screenshots\3.png" width="200">
-<img src="assets\screenshots\4.png" width="200">
+<img src="assets\screenshots\1.png" width="200"><img src="assets\screenshots\2.png" width="200"><img src="assets\screenshots\3.png" width="200"><img src="assets\screenshots\4.png" width="200">
 
 ## How to build
 
