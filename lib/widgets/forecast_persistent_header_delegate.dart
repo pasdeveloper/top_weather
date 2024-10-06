@@ -26,6 +26,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         ));
   }
 
+  final double _descriptionContainerHeight = 80;
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -60,16 +62,6 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                     ColorTween(begin: Colors.black38, end: Colors.transparent)
                         .transform(collapsePercentage)),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _appBar(context, collapsePercentage),
-              if (!forecast.empty) _temperature(context, collapsePercentage),
-              SizedBox(
-                height: (1 - collapsePercentage) * 60,
-              )
-            ],
-          ),
           if (!forecast.empty)
             Positioned(
               bottom: 0,
@@ -77,6 +69,17 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               left: 0,
               child: _descriptions(context, collapsePercentage),
             ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _appBar(context, collapsePercentage),
+              if (!forecast.empty)
+                Expanded(child: _temperature(context, collapsePercentage)),
+              SizedBox(
+                height: (1 - collapsePercentage) * _descriptionContainerHeight,
+              )
+            ],
+          ),
         ],
       ),
     );
@@ -144,36 +147,51 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${forecast.nowTemperature}°',
-                style: textTheme.displayLarge!
-                    .copyWith(fontWeight: FontWeight.bold, color: textColor),
-              ),
-              Text(
-                AppLocalizations.of(context)!
-                    .feelsLikeTemperature(forecast.feelsLikeTemperature),
-                style: textTheme.titleMedium!.copyWith(color: textColor),
-              ),
-            ],
+          Expanded(
+            // flex: 3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${forecast.nowTemperature}°',
+                  style: textTheme.displayLarge!
+                      .copyWith(fontWeight: FontWeight.bold, color: textColor),
+                ),
+                Text(
+                  AppLocalizations.of(context)!
+                      .feelsLikeTemperature(forecast.feelsLikeTemperature),
+                  style: textTheme.titleMedium!.copyWith(color: textColor),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ForecastIconWidget(
-                icon: forecast.icon,
-                width: max(50, (1 - collapsePercentage) * 120),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                forecast.description,
-                style: textTheme.titleMedium!.copyWith(color: textColor),
-              ),
-            ],
+          Expanded(
+            // flex: 2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => ForecastIconWidget(
+                        icon: forecast.icon,
+                        height: min(
+                            constraints.maxWidth * .7, constraints.maxHeight),
+                        alignment: Alignment.bottomRight),
+                  ),
+                ),
+                Text(
+                  forecast.description,
+                  style: textTheme.titleMedium!.copyWith(color: textColor),
+                  textAlign: TextAlign.end,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -186,7 +204,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         LocaleDateFormatting(AppLocalizations.of(context)!.localeName);
     final color = Colors.white.withOpacity(1 - collapsePercentage);
 
-    return Padding(
+    return Container(
+      height: _descriptionContainerHeight,
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -224,7 +224,7 @@ Widget _todayTabContent(Forecast forecast) => Builder(builder: (context) {
                     iconData: Icons.waves,
                     sideIcon: true,
                     child: Text(
-                      '${forecast.pressure} hpa',
+                      '${forecast.pressure.toDouble()} hpa',
                       style: textTheme.bodyLarge!
                           .copyWith(color: colorScheme.onSurface),
                     ),

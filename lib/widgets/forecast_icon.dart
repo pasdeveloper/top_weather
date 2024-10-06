@@ -4,19 +4,22 @@ import 'package:top_weather/constants/assets.dart';
 import 'package:top_weather/models/forecast.dart';
 
 class ForecastIconWidget extends StatelessWidget {
-  const ForecastIconWidget(
-      {super.key,
-      required this.icon,
-      this.width,
-      this.height,
-      this.fit = BoxFit.contain,
-      this.colorFilter});
+  const ForecastIconWidget({
+    super.key,
+    required this.icon,
+    this.width,
+    this.height,
+    this.fit = BoxFit.contain,
+    this.colorFilter,
+    this.alignment = Alignment.center,
+  });
 
   final ForecastIcon icon;
   final double? width;
   final double? height;
   final BoxFit fit;
   final ColorFilter? colorFilter;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class ForecastIconWidget extends StatelessWidget {
       height: height,
       fit: fit,
       colorFilter: colorFilter,
+      alignment: alignment,
     );
   }
 }

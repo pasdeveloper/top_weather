@@ -79,21 +79,31 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
                   dateFormatting.dateFormatter
                       .format(widget.dayForecast.datetime),
                   style: textTheme.titleSmall!
                       .copyWith(color: colorScheme.onSecondaryContainer),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
                 Text(
                   widget.dayForecast.description,
                   style: textTheme.bodySmall!
                       .copyWith(color: colorScheme.onSecondaryContainer),
-                )
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
+          ),
+          const SizedBox(
+            width: 10,
           ),
           Row(
             children: [

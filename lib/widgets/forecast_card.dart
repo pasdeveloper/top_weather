@@ -27,25 +27,31 @@ class ForecastCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                icon,
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: textTheme.titleSmall!
-                          .copyWith(color: colorScheme.onSurface),
-                    ),
-                    if (sideIcon) ...[const SizedBox(height: 5), child]
-                  ],
-                )
-              ],
+            FittedBox(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  icon,
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: textTheme.titleSmall!
+                            .copyWith(color: colorScheme.onSurface),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                      if (sideIcon) ...[const SizedBox(height: 5), child]
+                    ],
+                  )
+                ],
+              ),
             ),
             if (!sideIcon) ...[
               const SizedBox(height: 5),
