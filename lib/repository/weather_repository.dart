@@ -1,4 +1,4 @@
-import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/forecast/forecast.dart';
 import 'package:top_weather/models/location.dart';
 
 abstract class WeatherRepository {

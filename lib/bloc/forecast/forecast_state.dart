@@ -1,6 +1,14 @@
 part of 'forecast_cubit.dart';
 
-enum ForecastStatus { empty, loading, ok, error }
+enum ForecastStatus {
+  empty,
+  loading,
+  ok,
+  error;
+
+  String toMap() => name;
+  static ForecastStatus fromMap(String name) => values.byName(name);
+}
 
 class ForecastState extends Equatable {
   final Forecast forecast;
@@ -37,4 +45,20 @@ class ForecastState extends Equatable {
 
   @override
   List<Object> get props => [forecast, status, error];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'forecast': forecast.toMap(),
+      'status': status.toMap(),
+      'error': error,
+    };
+  }
+
+  factory ForecastState.fromMap(Map<String, dynamic> map) {
+    return ForecastState(
+      forecast: Forecast.fromMap(map['forecast']),
+      status: ForecastStatus.fromMap(map['status']),
+      error: map['error'] ?? '',
+    );
+  }
 }

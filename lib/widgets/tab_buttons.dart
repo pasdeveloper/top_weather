@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:top_weather/bloc/forecast/forecast_cubit.dart';
 import 'package:top_weather/bloc/header/header_cubit.dart';
 
 class TabButtons extends StatefulWidget {
@@ -37,6 +38,14 @@ class _TabButtonsState extends State<TabButtons> {
     final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<HeaderCubit, HeaderState>(
       builder: (context, state) {
+        final nextDaysCount = context
+                .read<ForecastCubit>()
+                .state
+                .forecast
+                .dailyForecast
+                ?.days
+                .length ??
+            0;
         return Container(
           decoration: BoxDecoration(
             color: state.collapsed
@@ -70,7 +79,7 @@ class _TabButtonsState extends State<TabButtons> {
                 width: 8,
               ),
               _tabButton(
-                  AppLocalizations.of(context)!.nextDaysButton,
+                  AppLocalizations.of(context)!.nextDaysButton(nextDaysCount),
                   colorScheme,
                   textTheme,
                   state.collapsed,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:top_weather/core/locale_date_formatting.dart';
 import 'package:top_weather/l10n/localizations_export.dart';
-import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/forecast/daily_forecast.dart';
 import 'package:top_weather/widgets/forecast_icon.dart';
 import 'package:top_weather/widgets/hourly_forecast_scrollable_row.dart';
 

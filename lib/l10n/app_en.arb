@@ -17,6 +17,13 @@
       }
     }
   },
+  "@nextDaysButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "addLocationErrorEmptyName": "Name cannot be empty",
   "addLocationErrorInvalid": "Invalid name",
   "addLocationHint": "City name or street name...",
@@ -29,11 +36,12 @@
   "emptyLocations": "No location yet, add a new one",
   "feelsLikeTemperature": "Feels like {temperature}°",
   "hourlyForecast": "Hourly forecast",
+  "howToDeleteLocations": "Dismiss a location to remove it",
   "lastUpdated": "Last updated at {lastUpdated} from {source}",
   "loadingForecast": "Loading...",
   "locations": "Locations",
   "locationsErrorConfirm": "Ok",
-  "nextDaysButton": "Next days",
+  "nextDaysButton": "Next {count, plural, =0{days} =1{day} other{{count} days}}",
   "north": "North",
   "northEast": "NorthEast",
   "northWest": "NorthWest",
@@ -45,6 +53,7 @@
   "sunrise": "Sunrise",
   "sunset": "Sunset",
   "todayButton": "Today",
+  "unavailable": "Unavailable",
   "uvIndex": "UV index",
   "west": "West",
   "windDirection": "Wind direction",

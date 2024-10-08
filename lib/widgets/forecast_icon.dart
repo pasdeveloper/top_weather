@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:top_weather/constants/assets.dart';
-import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/forecast/forecast_icon.dart';
 
 class ForecastIconWidget extends StatelessWidget {
   const ForecastIconWidget({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:top_weather/constants/time_formatting.dart';
-import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/forecast/hourly_forecast.dart';
 import 'package:top_weather/widgets/forecast_icon.dart';
 
 class HourlyForecastScrollableRow extends StatelessWidget {

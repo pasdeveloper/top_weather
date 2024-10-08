@@ -1,6 +1,10 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:top_weather/constants/assets.dart';
+import 'package:top_weather/models/forecast/daily_forecast.dart';
+import 'package:top_weather/models/forecast/forecast_icon.dart';
+import 'package:top_weather/models/forecast/hourly_forecast.dart';
 
 final _random = Random();
 const _hotIfMoreThan = 30;
@@ -13,7 +17,8 @@ const _windIfMoreThan = 20; // km/h
 const _fogIfLessThan = 2; // km visibility
 const _cloudIfMoreThan = 50; // % cloud coverage
 
-class Forecast {
+// ignore: must_be_immutable
+class Forecast extends Equatable {
   final String currentLocation;
   final ForecastIcon icon;
   final String description;
@@ -21,10 +26,6 @@ class Forecast {
   final double todayMinTemperature;
   final double todayMaxTemperature;
   final double feelsLikeTemperature;
-  final int nowTemperatureRound;
-  final int todayMinTemperatureRound;
-  final int todayMaxTemperatureRound;
-  final int feelsLikeTemperatureRound;
   final String weatherSource;
   final DateTime weatherDataDatetime;
   final DateTime createdAt;
@@ -40,8 +41,13 @@ class Forecast {
   final double? cloudCoverPercentage;
   final DateTime? sunrise;
   final DateTime? sunset;
-  bool _empty = false;
+  late bool _empty = false;
   bool get empty => _empty;
+
+  int get nowTemperatureRound => nowTemperature.round();
+  int get todayMinTemperatureRound => todayMinTemperature.round();
+  int get todayMaxTemperatureRound => todayMaxTemperature.round();
+  int get feelsLikeTemperatureRound => feelsLikeTemperature.round();
 
   late String _background;
   String get background => _background;
@@ -68,11 +74,7 @@ class Forecast {
     required this.cloudCoverPercentage,
     this.sunrise,
     this.sunset,
-  })  : nowTemperatureRound = nowTemperature.round(),
-        todayMinTemperatureRound = todayMinTemperature.round(),
-        todayMaxTemperatureRound = todayMaxTemperature.round(),
-        feelsLikeTemperatureRound = feelsLikeTemperature.round(),
-        createdAt = DateTime.now() {
+  }) : createdAt = DateTime.now() {
     _setBackground();
   }
 
@@ -171,108 +173,99 @@ class Forecast {
 
   @override
   String toString() {
-    return 'Forecast(currentLocation: $currentLocation, icon: $icon, description: $description, nowTemperature: $nowTemperature, todayMinTemperature: $todayMinTemperature, todayMaxTemperature: $todayMaxTemperature, feelsLikeTemperature: $feelsLikeTemperature, nowTemperatureRound: $nowTemperatureRound, todayMinTemperatureRound: $todayMinTemperatureRound, todayMaxTemperatureRound: $todayMaxTemperatureRound, feelsLikeTemperatureRound: $feelsLikeTemperatureRound, weatherSource: $weatherSource, weatherDataDatetime: $weatherDataDatetime, createdAt: $createdAt, hourlyForecast: $hourlyForecast, dailyForecast: $dailyForecast, windSpeed: $windSpeed, windDirection: $windDirection, pressure: $pressure, uvIndex: $uvIndex, snow: $snow, precipitationProbability: $precipitationProbability, visibility: $visibility, cloudCoverPercentage: $cloudCoverPercentage, sunrise: $sunrise, sunset: $sunset, _empty: $_empty, _background: $_background)';
+    return 'Forecast(currentLocation: $currentLocation, icon: $icon, description: $description, nowTemperature: $nowTemperature, todayMinTemperature: $todayMinTemperature, todayMaxTemperature: $todayMaxTemperature, feelsLikeTemperature: $feelsLikeTemperature, weatherSource: $weatherSource, weatherDataDatetime: $weatherDataDatetime, createdAt: $createdAt, hourlyForecast: $hourlyForecast, dailyForecast: $dailyForecast, windSpeed: $windSpeed, windDirection: $windDirection, pressure: $pressure, uvIndex: $uvIndex, snow: $snow, precipitationProbability: $precipitationProbability, visibility: $visibility, cloudCoverPercentage: $cloudCoverPercentage, sunrise: $sunrise, sunset: $sunset, _empty: $_empty, _background: $_background)';
   }
-}
 
-class HourlyForecast {
-  final List<HourForecast> hours;
+  @override
+  List<Object?> get props {
+    return [
+      currentLocation,
+      icon,
+      description,
+      nowTemperature,
+      todayMinTemperature,
+      todayMaxTemperature,
+      feelsLikeTemperature,
+      weatherSource,
+      weatherDataDatetime,
+      createdAt,
+      hourlyForecast,
+      dailyForecast,
+      windSpeed,
+      windDirection,
+      pressure,
+      uvIndex,
+      snow,
+      precipitationProbability,
+      visibility,
+      cloudCoverPercentage,
+      sunrise,
+      sunset,
+      _empty,
+      _background,
+    ];
+  }
 
-  HourlyForecast({
-    required this.hours,
-  });
-}
+  Map<String, dynamic> toMap() {
+    return {
+      'currentLocation': currentLocation,
+      'icon': icon.toMap(),
+      'description': description,
+      'nowTemperature': nowTemperature,
+      'todayMinTemperature': todayMinTemperature,
+      'todayMaxTemperature': todayMaxTemperature,
+      'feelsLikeTemperature': feelsLikeTemperature,
+      'weatherSource': weatherSource,
+      'weatherDataDatetime': weatherDataDatetime.millisecondsSinceEpoch,
+      // 'createdAt': createdAt.millisecondsSinceEpoch,
+      'hourlyForecast': hourlyForecast?.toMap(),
+      'dailyForecast': dailyForecast?.toMap(),
+      'windSpeed': windSpeed,
+      'windDirection': windDirection,
+      'pressure': pressure,
+      'uvIndex': uvIndex,
+      'snow': snow,
+      'precipitationProbability': precipitationProbability,
+      'visibility': visibility,
+      'cloudCoverPercentage': cloudCoverPercentage,
+      'sunrise': sunrise?.millisecondsSinceEpoch,
+      'sunset': sunset?.millisecondsSinceEpoch,
+    };
+  }
 
-class HourForecast {
-  final DateTime datetime;
-  final double temperature;
-  final int temperatureRound;
-  final ForecastIcon icon;
-  final String description;
-  final int? precipitationProbability;
-
-  HourForecast({
-    required this.datetime,
-    required this.temperature,
-    required this.icon,
-    required this.description,
-    this.precipitationProbability,
-  }) : temperatureRound = temperature.round();
-}
-
-class DailyForecast {
-  final List<DayForecast> days;
-
-  DailyForecast({
-    required this.days,
-  });
-}
-
-class DayForecast {
-  final DateTime datetime;
-  final double minTemperature;
-  final double maxTemperature;
-  final int minTemperatureRound;
-  final int maxTemperatureRound;
-  final String description;
-  final ForecastIcon icon;
-  final int? precipitationProbability;
-  final HourlyForecast? hourlyForecast;
-
-  DayForecast({
-    required this.datetime,
-    required this.minTemperature,
-    required this.maxTemperature,
-    required this.icon,
-    required this.description,
-    this.precipitationProbability,
-    this.hourlyForecast,
-  })  : minTemperatureRound = minTemperature.round(),
-        maxTemperatureRound = maxTemperature.round();
-}
-
-// enum
-enum ForecastIcon {
-  blizzard,
-  blowingSnow,
-  clearNight,
-  clearDay,
-  cloudy,
-  cloudyWithRain,
-  cloudyWithSnow,
-  cloudyWithSunny,
-  drizzle,
-  flurries,
-  hazeFogDustSmoke,
-  heavyRain,
-  heavySnow,
-  icy,
-  isolatedScatteredThunderstormsDay,
-  isolatedScatteredThunderstormsNight,
-  isolatedThunderstorms,
-  mixedRainSnow,
-  mixedRainSleetHail,
-  mostlyClearDay,
-  mostlyClearNight,
-  mostlyCloudyDay,
-  mostlyCloudyNight,
-  notAvailable,
-  partlyCloudyDay,
-  partlyCloudyNight,
-  scatteredShowersDay,
-  scatteredShowersNight,
-  scatteredSnowShowersDay,
-  scatteredSnowShowersNight,
-  showersRain,
-  showersSnow,
-  sleetHail,
-  strongThunderstorms,
-  sunnyAndCloudy,
-  sunnyWithRainDarkSky,
-  sunnyWithSnow,
-  tornado,
-  tropicalStormHurricane,
-  veryCold,
-  veryHot,
-  windyBreezy
+  factory Forecast.fromMap(Map<String, dynamic> map) {
+    return Forecast(
+      currentLocation: map['currentLocation'] ?? '',
+      icon: ForecastIcon.fromMap(map['icon']),
+      description: map['description'] ?? '',
+      nowTemperature: map['nowTemperature']?.toDouble() ?? 0.0,
+      todayMinTemperature: map['todayMinTemperature']?.toDouble() ?? 0.0,
+      todayMaxTemperature: map['todayMaxTemperature']?.toDouble() ?? 0.0,
+      feelsLikeTemperature: map['feelsLikeTemperature']?.toDouble() ?? 0.0,
+      weatherSource: map['weatherSource'] ?? '',
+      weatherDataDatetime:
+          DateTime.fromMillisecondsSinceEpoch(map['weatherDataDatetime']),
+      // createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      hourlyForecast: map['hourlyForecast'] != null
+          ? HourlyForecast.fromMap(map['hourlyForecast'])
+          : null,
+      dailyForecast: map['dailyForecast'] != null
+          ? DailyForecast.fromMap(map['dailyForecast'])
+          : null,
+      windSpeed: map['windSpeed']?.toDouble() ?? 0.0,
+      windDirection: map['windDirection']?.toDouble() ?? 0.0,
+      pressure: map['pressure']?.toDouble() ?? 0.0,
+      uvIndex: map['uvIndex']?.toDouble() ?? 0.0,
+      snow: map['snow']?.toDouble(),
+      precipitationProbability: map['precipitationProbability']?.toDouble(),
+      visibility: map['visibility']?.toDouble(),
+      cloudCoverPercentage: map['cloudCoverPercentage']?.toDouble(),
+      sunrise: map['sunrise'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['sunrise'])
+          : null,
+      sunset: map['sunset'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['sunset'])
+          : null,
+    );
+  }
 }

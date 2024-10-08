@@ -2,10 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-// ignore: unused_import
 import 'package:http/http.dart' as http;
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/standalone.dart' as tz;
 import 'package:top_weather/core/http_harror_handling.dart';
-import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/forecast/daily_forecast.dart';
+import 'package:top_weather/models/forecast/forecast.dart';
+import 'package:top_weather/models/forecast/forecast_icon.dart';
+import 'package:top_weather/models/forecast/hourly_forecast.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/repository/weather_repository.dart';
 import 'package:top_weather/weather_sources/visual-crossing-weather/exceptions/data_fetch_exception.dart';
@@ -23,7 +27,9 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
             'iconSet': 'icons2',
             'lang': languageCode
           },
-        );
+        ) {
+    tz.initializeTimeZones();
+  }
   final Uri _baseUrl;
 
   @override
@@ -87,7 +93,8 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
 
   Forecast _toForecast(WeatherData data) {
     final hours = _getNext24Hours(data);
-    final days = _getNext7Days(data);
+    // final days = _getNext7Days(data);
+    final days = _getNextDays(data);
 
     final now = data.currentConditions;
 
@@ -100,7 +107,7 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       todayMaxTemperature: data.days[0].tempmax ?? 0,
       feelsLikeTemperature: now.feelslike,
       weatherSource: 'Visual Crossing Weather',
-      weatherDataDatetime: _toDateTime(now.datetimeEpoch),
+      weatherDataDatetime: _toDateTime(now.datetimeEpoch, data.timezone),
       hourlyForecast: HourlyForecast(hours: hours),
       dailyForecast: DailyForecast(days: days),
       windSpeed: now.windspeed,
@@ -111,8 +118,12 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
       precipitationProbability: now.precipprob,
       visibility: now.visibility,
       cloudCoverPercentage: now.cloudcover,
-      sunrise: now.sunriseEpoch != null ? _toDateTime(now.sunriseEpoch!) : null,
-      sunset: now.sunsetEpoch != null ? _toDateTime(now.sunsetEpoch!) : null,
+      sunrise: now.sunriseEpoch != null
+          ? _toDateTime(now.sunriseEpoch!, data.timezone)
+          : null,
+      sunset: now.sunsetEpoch != null
+          ? _toDateTime(now.sunsetEpoch!, data.timezone)
+          : null,
     );
   }
 
@@ -173,8 +184,10 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
   //   );
   // }
 
-  DateTime _toDateTime(int seconds) {
-    return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+  DateTime _toDateTime(int seconds, String timezone) {
+    final location = tz.getLocation(timezone);
+    return tz.TZDateTime.fromMillisecondsSinceEpoch(location, seconds * 1000);
+    // .toLocal();
   }
 
   List<HourForecast> _getNext24Hours(WeatherData data) {
@@ -184,24 +197,49 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
         ? data.days[1].hours ?? <Conditions>[]
         : <Conditions>[];
 
-    var currentHour = DateTime.now().hour;
+    final location = tz.getLocation(data.timezone);
+    var currentHour = tz.TZDateTime.from(DateTime.now().toUtc(), location).hour;
     final todayAndTomorrow = [...todaysHours, ...tomorrowsHours];
     return todayAndTomorrow
         .sublist(
             max(currentHour, 0), min(todayAndTomorrow.length, currentHour + 24))
         .map(
-          (hourData) => _toHourForecast(hourData),
+          (hourData) => _toHourForecast(hourData, data.timezone),
         )
         .toList();
   }
 
-  HourForecast _toHourForecast(Conditions conditions) => HourForecast(
-        datetime: _toDateTime(conditions.datetimeEpoch),
+  HourForecast _toHourForecast(Conditions conditions, String timezone) =>
+      HourForecast(
+        datetime: _toDateTime(conditions.datetimeEpoch, timezone),
         temperature: conditions.temp,
         icon: _toForecastIcon(conditions.icon),
         description: conditions.conditions,
         precipitationProbability: conditions.precipprob?.round(),
       );
+
+  List<DayForecast> _getNextDays(WeatherData data) {
+    return data.days.map(
+      (dayData) {
+        final hourlyForecast = dayData.hours == null
+            ? null
+            : HourlyForecast(
+                hours: dayData.hours!
+                    .map((hourData) => _toHourForecast(hourData, data.timezone))
+                    .toList(),
+              );
+        return DayForecast(
+          datetime: _toDateTime(dayData.datetimeEpoch, data.timezone),
+          minTemperature: dayData.tempmin!,
+          maxTemperature: dayData.tempmax!,
+          icon: _toForecastIcon(dayData.icon),
+          description: dayData.conditions,
+          precipitationProbability: dayData.precipprob?.round(),
+          hourlyForecast: hourlyForecast,
+        );
+      },
+    ).toList();
+  }
 
   List<DayForecast> _getNext7Days(WeatherData data) {
     return data.days.sublist(0, min(data.days.length, 7)).map(
@@ -210,11 +248,11 @@ class VisualCrossingWeatherRepository implements WeatherRepository {
             ? null
             : HourlyForecast(
                 hours: dayData.hours!
-                    .map((hourData) => _toHourForecast(hourData))
+                    .map((hourData) => _toHourForecast(hourData, data.timezone))
                     .toList(),
               );
         return DayForecast(
-          datetime: _toDateTime(dayData.datetimeEpoch),
+          datetime: _toDateTime(dayData.datetimeEpoch, data.timezone),
           minTemperature: dayData.tempmin!,
           maxTemperature: dayData.tempmax!,
           icon: _toForecastIcon(dayData.icon),

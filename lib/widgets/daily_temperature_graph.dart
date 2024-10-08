@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:top_weather/core/locale_date_formatting.dart';
 import 'package:top_weather/l10n/localizations_export.dart';
-import 'package:top_weather/models/forecast.dart';
+import 'package:top_weather/models/forecast/daily_forecast.dart';
 
 class DailyTemperatureGraph extends StatelessWidget {
   const DailyTemperatureGraph({
@@ -80,7 +80,7 @@ class DailyTemperatureGraph extends StatelessWidget {
           )),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
-              interval: 1,
+              // interval: (dailyForecast.days.length / 7).roundToDouble(),
               showTitles: true,
               // maxIncluded: false,
               // minIncluded: false,

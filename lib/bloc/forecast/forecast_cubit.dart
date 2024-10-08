@@ -1,12 +1,13 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:top_weather/models/forecast.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:top_weather/models/forecast/forecast.dart';
 import 'package:top_weather/models/location.dart';
 import 'package:top_weather/repository/weather_repository.dart';
 
 part 'forecast_state.dart';
 
-class ForecastCubit extends Cubit<ForecastState> {
+// hydrated so that on first laucnh doesn't show empty weather
+class ForecastCubit extends HydratedCubit<ForecastState> {
   final WeatherRepository _repository;
   ForecastCubit(this._repository) : super(ForecastState.initial());
 
@@ -24,5 +25,17 @@ class ForecastCubit extends Cubit<ForecastState> {
   void emptyForecast() {
     emit(state.copyWith(
         status: ForecastStatus.empty, forecast: Forecast.empty()));
+  }
+
+  @override
+  ForecastState? fromJson(Map<String, dynamic> json) {
+    final state = ForecastState.fromMap(json);
+    return state;
+  }
+
+  @override
+  Map<String, dynamic>? toJson(ForecastState state) {
+    final map = state.toMap();
+    return map;
   }
 }

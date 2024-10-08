@@ -36,8 +36,12 @@ class Locations extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        final colorScheme = Theme.of(context).colorScheme;
+        final textTheme = Theme.of(context).textTheme;
         return Scaffold(
           appBar: AppBar(
+            forceMaterialTransparency: true,
+            surfaceTintColor: Colors.transparent,
             title: Text(AppLocalizations.of(context)!.locations),
           ),
           body: Column(
@@ -54,6 +58,12 @@ class Locations extends StatelessWidget {
                     ? _emptyList(context)
                     : _locationsList(context, state.locations),
               ),
+              Text(
+                AppLocalizations.of(context)!.howToDeleteLocations,
+                style: textTheme.labelSmall!
+                    .copyWith(color: colorScheme.onSurface),
+                textAlign: TextAlign.center,
+              )
             ],
           ),
         );
