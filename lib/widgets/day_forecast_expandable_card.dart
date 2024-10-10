@@ -17,11 +17,13 @@ class DayForecastExpandableCard extends StatefulWidget {
   State<DayForecastExpandableCard> createState() => _DayForecastCardState();
 }
 
-class _DayForecastCardState extends State<DayForecastExpandableCard> {
+class _DayForecastCardState extends State<DayForecastExpandableCard>
+    with AutomaticKeepAliveClientMixin {
   var _expanded = false;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Card(
@@ -154,4 +156,7 @@ class _DayForecastCardState extends State<DayForecastExpandableCard> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => _expanded;
 }
