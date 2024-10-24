@@ -14,13 +14,11 @@ class RainChanceScrollableColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: hourlyForecast.hours
-            .map((hourForecast) =>
-                _rainChanceTile(colorScheme, textTheme, hourForecast))
-            .toList(),
-      ),
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      itemCount: hourlyForecast.hours.length,
+      itemBuilder: (context, index) =>
+          _rainChanceTile(colorScheme, textTheme, hourlyForecast.hours[index]),
     );
   }
 
