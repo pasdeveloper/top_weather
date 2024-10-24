@@ -44,7 +44,7 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             bottomLeft: Radius.circular(33 * (1 - collapsePercentage)),
             bottomRight: Radius.circular(33 * (1 - collapsePercentage))),
       ),
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
           Positioned.fill(
@@ -58,9 +58,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
           ),
           Container(
             decoration: BoxDecoration(
-                color:
-                    ColorTween(begin: Colors.black38, end: Colors.transparent)
-                        .transform(collapsePercentage)),
+                color: Color.lerp(
+                    Colors.black38, Colors.transparent, collapsePercentage)),
           ),
           if (!forecast.empty)
             Positioned(
@@ -86,10 +85,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   Widget _appBar(BuildContext context, double collapsePercentage) {
-    final textColor = ColorTween(
-            begin: Colors.white,
-            end: Theme.of(context).colorScheme.onPrimaryContainer)
-        .transform(collapsePercentage);
+    final textColor = Color.lerp(Colors.white,
+        Theme.of(context).colorScheme.onPrimaryContainer, collapsePercentage);
 
     return AppBar(
       backgroundColor: Colors.transparent,
@@ -138,9 +135,8 @@ class ForecastPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   Widget _temperature(BuildContext context, double collapsePercentage) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    final textColor =
-        ColorTween(begin: Colors.white, end: colorScheme.onPrimaryContainer)
-            .transform(collapsePercentage);
+    final textColor = Color.lerp(
+        Colors.white, colorScheme.onPrimaryContainer, collapsePercentage);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(

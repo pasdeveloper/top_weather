@@ -51,11 +51,6 @@ class _TabButtonsState extends State<TabButtons> {
             color: state.collapsed
                 ? colorScheme.primaryContainer
                 : Colors.transparent,
-
-            // ColorTween(
-            //         begin: Colors.transparent,
-            //         end: colorScheme.primaryContainer)
-            //     .transform(widget.collapsePercentage),
             boxShadow: [
               if (state.collapsed)
                 BoxShadow(
@@ -111,11 +106,6 @@ Widget _tabButton(String text, ColorScheme colorScheme, TextTheme textTheme,
                   ? colorScheme.surface
                   : colorScheme.secondaryContainer,
         ),
-
-        // ColorTween(
-        //         begin: colorScheme.secondaryContainer,
-        //         end: colorScheme.surface)
-        //     .transform(collapsePercentage),
         child: Center(
           child: Text(
             text,
@@ -125,10 +115,6 @@ Widget _tabButton(String text, ColorScheme colorScheme, TextTheme textTheme,
                   : collapsed
                       ? colorScheme.onSurface
                       : colorScheme.onSecondaryContainer,
-              // ColorTween(
-              //         begin: colorScheme.onSecondaryContainer,
-              //         end: colorScheme.onSurface)
-              //     .transform(collapsePercentage),
             ),
           ),
         ),
